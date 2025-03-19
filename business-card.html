@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMJD Technologies - Business Card</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        .card-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+            padding: 80px 20px;
+            background-color: var(--light-color);
+        }
+        
+        .card-container {
+            width: 600px;
+            height: 340px;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+        
+        .card:hover {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .hover-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            z-index: 10;
+        }
+        
+        .card-intro {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">
+                    <svg width="50" height="50" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#1a2a6c" />
+                                <stop offset="50%" stop-color="#b21f1f" />
+                                <stop offset="100%" stop-color="#fdbb2d" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="256" cy="256" r="256" fill="url(#logoGradient)"/>
+                        <path d="M256,120 C200,120 160,160 160,210 C160,260 200,280 256,280 C312,280 352,300 352,350 C352,400 312,440 256,440 C200,440 160,400 160,350" 
+                            fill="none" stroke="white" stroke-width="24" stroke-linecap="round"/>
+                        <circle cx="160" cy="210" r="12" fill="white"/>
+                        <circle cx="160" cy="350" r="12" fill="white"/>
+                        <circle cx="256" cy="120" r="12" fill="white"/>
+                        <circle cx="256" cy="280" r="12" fill="white"/>
+                        <circle cx="256" cy="440" r="12" fill="white"/>
+                        <circle cx="352" cy="350" r="12" fill="white"/>
+                    </svg>
+                </div>
+                <div class="company-name">
+                    <h1>SAMJD Technologies</h1>
+                    <p class="tagline">Innovative Solutions in Java, AI & Blockchain</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="index.html#expertise">Expertise</a></li>
+                    <li><a href="index.html#projects">Projects</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="card-section">
+        <div class="container">
+            <div class="card-intro">
+                <br/>
+                <h2>Interactive Business Card</h2>
+                <p>Hover over the card to flip it and see more information about SAMJD Technologies.</p>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-front">
+                        <svg width="600" height="340" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background with gradient -->
+                            <defs>
+                                <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#1a2a6c" />
+                                    <stop offset="50%" stop-color="#b21f1f" />
+                                    <stop offset="100%" stop-color="#fdbb2d" />
+                                </linearGradient>
+                                
+                                <!-- Circuit board pattern -->
+                                <pattern id="circuitPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                                    <path d="M10,10 L90,10 L90,90 L10,90 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                    <circle cx="10" cy="10" r="3" fill="rgba(255,255,255,0.2)"/>
+                                    <circle cx="90" cy="10" r="3" fill="rgba(255,255,255,0.2)"/>
+                                    <circle cx="90" cy="90" r="3" fill="rgba(255,255,255,0.2)"/>
+                                    <circle cx="10" cy="90" r="3" fill="rgba(255,255,255,0.2)"/>
+                                    <path d="M10,10 L50,50 L90,10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                    <path d="M10,90 L50,50 L90,90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                </pattern>
+                                
+                                <!-- AI/Tech icons -->
+                                <symbol id="aiIcon" viewBox="0 0 24 24">
+                                    <path d="M12,2 L2,7 L12,12 L22,7 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M2,17 L12,22 L22,17" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M2,12 L12,17 L22,12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M2,7 L2,17" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M22,7 L22,17" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                </symbol>
+                                
+                                <symbol id="blockchainIcon" viewBox="0 0 24 24">
+                                    <rect x="4" y="4" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <rect x="14" y="4" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <rect x="4" y="14" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <rect x="14" y="14" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M10,7 L14,7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7,10 L7,14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M17,10 L17,14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M10,17 L14,17" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                </symbol>
+                                
+                                <symbol id="javaIcon" viewBox="0 0 24 24">
+                                    <path d="M8,18 C8,18 6,17 6,15 C6,13 8,11 8,9 C8,7 6,5 6,5 C6,5 10,7 10,9 C10,11 8,13 8,15 C8,17 10,18 10,18 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M12,18 C12,18 10,17 10,15 C10,13 12,11 12,9 C12,7 10,5 10,5 C10,5 14,7 14,9 C14,11 12,13 12,15 C12,17 14,18 14,18 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M6,19 C6,19 14,19 16,19 C18,19 18,21 16,21 C14,21 6,21 6,21" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                </symbol>
+                            </defs>
+                            
+                            <!-- Card background -->
+                            <rect width="600" height="340" rx="15" fill="url(#cardGradient)"/>
+                            
+                            <!-- Circuit pattern overlay -->
+                            <rect width="600" height="340" fill="url(#circuitPattern)" opacity="0.7"/>
+                            
+                            <!-- Abstract tech elements -->
+                            <circle cx="500" cy="70" r="50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                            <circle cx="500" cy="70" r="40" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <circle cx="500" cy="70" r="30" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                            
+                            <path d="M450,70 L550,70" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <path d="M500,20 L500,120" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            
+                            <!-- Company name -->
+                            <text x="40" y="70" font-family="Montserrat, sans-serif" font-size="28" font-weight="700" fill="white" letter-spacing="1">SAMJD TECHNOLOGIES</text>
+                            
+                            <!-- Tagline -->
+                            <text x="40" y="95" font-family="Roboto, sans-serif" font-size="14" font-weight="300" fill="white" opacity="0.9">Innovative Solutions in Java, AI &amp; Blockchain</text>
+                            
+                            <!-- Name -->
+                            <text x="40" y="240" font-family="Montserrat, sans-serif" font-size="24" font-weight="600" fill="white">Shawn Jackson Dyck</text>
+                            
+                            <!-- Title -->
+                            <text x="40" y="265" font-family="Roboto, sans-serif" font-size="16" fill="white">Senior Full Stack Java Developer</text>
+                            
+                            <!-- Contact info -->
+                            <text x="40" y="295" font-family="Roboto, sans-serif" font-size="14" fill="white">📧 shawn.dyck@proton.me</text>
+                            <text x="300" y="295" font-family="Roboto, sans-serif" font-size="14" fill="white">📱 604-213-2285</text>
+                            <text x="40" y="320" font-family="Roboto, sans-serif" font-size="14" fill="white">🌐 samjdtechnologies.com</text>
+                            
+                            <!-- Tech icons with labels - adjusted spacing -->
+                            <rect x="40" y="110" width="180" height="90" rx="10" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            
+                            <!-- AI Icon -->
+                            <use href="#aiIcon" x="70" y="130" width="32" height="32" stroke="white" stroke-width="2" opacity="1"/>
+                            <text x="70" y="175" font-family="Roboto, sans-serif" font-size="12" fill="white" text-anchor="start">AI</text>
+                            
+                            <!-- Blockchain Icon -->
+                            <use href="#blockchainIcon" x="130" y="130" width="32" height="32" stroke="white" stroke-width="2" opacity="1"/>
+                            <text x="130" y="175" font-family="Roboto, sans-serif" font-size="12" fill="white" text-anchor="middle">Blockchain</text>
+                            
+                            <!-- Java Icon - Adjusted to ensure full visibility and better spacing from right margin -->
+                            <use href="#javaIcon" x="175" y="120" width="32" height="42" stroke="white" stroke-width="2" opacity="1"/>
+                            <text x="175" y="175" font-family="Roboto, sans-serif" font-size="12" fill="white" text-anchor="start">Java</text>
+                            
+                            <!-- 20 years badge -->
+                            <circle cx="530" cy="240" r="40" fill="rgba(255,255,255,0.2)"/>
+                            <circle cx="530" cy="240" r="35" fill="none" stroke="white" stroke-width="2"/>
+                            <text x="530" y="235" font-family="Montserrat, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">20+</text>
+                            <text x="530" y="255" font-family="Montserrat, sans-serif" font-size="12" fill="white" text-anchor="middle">YEARS</text>
+                        </svg>
+                        <div class="hover-hint">Hover to see more</div>
+                    </div>
+                    
+                    <div class="card-back">
+                        <svg width="600" height="340" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background -->
+                            <rect width="600" height="340" rx="15" fill="white"/>
+                            
+                            <!-- Decorative elements -->
+                            <rect x="0" y="0" width="15" height="340" fill="#1a2a6c"/>
+                            <rect x="585" y="0" width="15" height="340" fill="#fdbb2d"/>
+                            
+                            <!-- Header -->
+                            <text x="40" y="50" font-family="Montserrat, sans-serif" font-size="18" font-weight="600" fill="#1a2a6c">EXPERTISE</text>
+                            
+                            <!-- Expertise pills -->
+                            <rect x="40" y="65" width="140" height="30" rx="15" fill="#1a2a6c"/>
+                            <text x="110" y="85" font-family="Roboto, sans-serif" font-size="13" fill="white" text-anchor="middle">20+ Years Experience</text>
+                            
+                            <rect x="190" y="65" width="100" height="30" rx="15" fill="#1a2a6c"/>
+                            <text x="240" y="85" font-family="Roboto, sans-serif" font-size="13" fill="white" text-anchor="middle">AI Development</text>
+                            
+                            <rect x="300" y="65" width="170" height="30" rx="15" fill="#1a2a6c"/>
+                            <text x="385" y="85" font-family="Roboto, sans-serif" font-size="13" fill="white" text-anchor="middle">Blockchain Knowledge</text>
+                            
+                            <rect x="480" y="65" width="90" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="525" y="85" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">Java/J2EE</text>
+                            
+                            <rect x="40" y="105" width="90" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="85" y="125" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">Full Stack</text>
+                            
+                            <rect x="140" y="105" width="170" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="225" y="125" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">High-Performance Systems</text>
+                            
+                            <rect x="320" y="105" width="140" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="390" y="125" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">System Integration</text>
+                            
+                            <!-- Current project -->
+                            <text x="40" y="165" font-family="Roboto, sans-serif" font-size="14" font-weight="700" fill="#555">Current Project:</text>
+                            <text x="40" y="185" font-family="Roboto, sans-serif" font-size="14" fill="#555">Grizzly News - AI-powered social media app converting daily news</text>
+                            <text x="40" y="205" font-family="Roboto, sans-serif" font-size="14" fill="#555">into comic strips using Perplexity.ai for web search, OpenAI, and Ollama-llama3.2</text>
+                            <text x="40" y="225" font-family="Roboto, sans-serif" font-size="14" fill="#555">for content analysis, DALL-E and FLUX.1-schnell for art generation.</text>
+                            
+                            <!-- Tech stack -->
+                            <rect x="40" y="245" width="60" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="70" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">Java</text>
+                            
+                            <rect x="110" y="245" width="70" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="145" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">Spring</text>
+                            
+                            <rect x="190" y="245" width="60" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="220" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">REST</text>
+                            
+                            <rect x="260" y="245" width="70" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="295" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">Oracle</text>
+                            
+                            <rect x="340" y="245" width="70" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="375" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">MySQL</text>
+                            
+                            <rect x="420" y="245" width="90" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="465" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">Hibernate</text>
+                            
+                            <rect x="520" y="245" width="40" height="30" rx="15" fill="#f0f0f0"/>
+                            <text x="540" y="265" font-family="Roboto, sans-serif" font-size="13" fill="#333" text-anchor="middle">JS</text>
+                            
+                            <!-- Footer -->
+                            <text x="300" y="300" font-family="Roboto, sans-serif" font-size="13" fill="#777" text-anchor="middle">SAMJD Technologies - Transforming Ideas into Reality</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <svg width="40" height="40" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#1a2a6c" />
+                                <stop offset="50%" stop-color="#b21f1f" />
+                                <stop offset="100%" stop-color="#fdbb2d" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="256" cy="256" r="256" fill="url(#footerLogoGradient)"/>
+                        <path d="M256,120 C200,120 160,160 160,210 C160,260 200,280 256,280 C312,280 352,300 352,350 C352,400 312,440 256,440 C200,440 160,400 160,350" 
+                            fill="none" stroke="white" stroke-width="24" stroke-linecap="round"/>
+                    </svg>
+                    <div class="footer-company">
+                        <h3>SAMJD Technologies</h3>
+                        <p>Transforming Ideas into Reality</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-nav">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="index.html#about">About</a></li>
+                            <li><a href="index.html#services">Services</a></li>
+                            <li><a href="index.html#expertise">Expertise</a></li>
+                            <li><a href="index.html#projects">Projects</a></li>
+                            <li><a href="index.html#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-services">
+                        <h4>Services</h4>
+                        <ul>
+                            <li>Java Development</li>
+                            <li>AI Solutions</li>
+                            <li>Blockchain Knowledge</li>
+                            <li>System Integration</li>
+                            <li>Web Development</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SAMJD Technologies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
