@@ -377,7 +377,7 @@ nav a.active {
 
 /* Contact Section */
 .contact {
-    background-color: var(--white-color);
+    background-color: var(--light-color);
 }
 
 .contact h2 {
