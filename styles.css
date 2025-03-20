@@ -490,7 +490,7 @@ footer {
     align-items: center;
     min-height: 600px;
     padding: 80px 20px;
-    background-color: var(--light-color);
+    background-color: var(--white-color);
 }
 
 .card-container {
