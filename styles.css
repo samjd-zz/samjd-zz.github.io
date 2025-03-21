@@ -375,6 +375,10 @@ nav a.active {
     font-weight: 600;
 }
 
+.project-card .organization {
+    font-weight: bold;
+}
+
 /* Contact Section */
 .contact {
     background-color: var(--light-color);
