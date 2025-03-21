@@ -242,6 +242,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .expertise-item:nth-child(6) {
             transition-delay: 1s;
         }
+        
+        .expertise-item:nth-child(7) {
+            transition-delay: 1.2s;
+        }
+        
+        .expertise-item:nth-child(8) {
+            transition-delay: 1.4s;
+        }
     `;
     document.head.appendChild(animationStyles);
     
