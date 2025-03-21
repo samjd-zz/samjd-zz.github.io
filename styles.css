@@ -593,6 +593,10 @@ footer {
     .project-cards {
         grid-template-columns: 1fr;
     }
+
+    .expertise-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
     
     .footer-links {
         flex-direction: column;
@@ -609,6 +613,10 @@ footer {
     
     .hero h2 {
         font-size: 2rem;
+    }
+
+    .expertise-grid {
+        grid-template-columns: 1fr;
     }
     
     .badge {
