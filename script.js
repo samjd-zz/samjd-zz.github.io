@@ -1,6 +1,37 @@
 // SAMJD Technologies Website JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Projects toggle functionality
+    const showMoreBtn = document.getElementById('show-more-projects');
+    const hiddenProjects = document.querySelectorAll('.hidden-project');
+    
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', function() {
+            // Toggle hidden projects visibility
+            let isExpanded = this.getAttribute('data-expanded') === 'true';
+            
+            if (!isExpanded) {
+                // Show hidden projects with staggered animation
+                hiddenProjects.forEach((project, index) => {
+                    setTimeout(() => {
+                        project.classList.add('show');
+                    }, index * 150); // 150ms delay between each project
+                });
+                
+                this.textContent = 'Show Less Projects';
+                this.setAttribute('data-expanded', 'true');
+            } else {
+                // Hide projects
+                hiddenProjects.forEach(project => {
+                    project.classList.remove('show');
+                });
+                
+                this.textContent = 'Show More Projects';
+                this.setAttribute('data-expanded', 'false');
+            }
+        });
+    }
+    
     // Smooth scrolling for navigation links
     const navLinks = document.querySelectorAll('nav a, .footer-nav a, a.btn[href^="#"]');
     
