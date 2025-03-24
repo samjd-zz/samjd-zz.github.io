@@ -12,7 +12,6 @@ This single-page website serves as an online presence for SAMJD Technologies, hi
 - **Interactive Business Card:** Interactive flip card that displays company information
 - **Project Portfolio:** Showcase of past and current projects with detailed descriptions
 - **Service Offerings:** Clear presentation of core services and expertise
-- **Contact Form:** Easy-to-use contact section for potential clients
 - **Modern UI:** Gradient color scheme, subtle animations, and professional typography
 
 ## File Structure
@@ -52,7 +51,6 @@ python3 -m http.server 8000
 ### Changing Contact Information
 
 Update the contact information in:
-- The Contact section near the bottom of `index.html`
 - The JSON-LD structured data in the `<head>` section
 - The interactive business card SVG in the Business Card section
 
