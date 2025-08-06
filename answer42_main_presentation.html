@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer42: Revolutionary AI-Powered Academic Research Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d2d5f 100%);
+            color: #ffffff;
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        .presentation-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+            animation: slideIn 0.6s ease-out;
+            padding: 20px 0;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #4ade80, #06b6d4, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #4ade80;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: #06b6d4;
+            margin-bottom: 1rem;
+        }
+
+        p, li {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-side {
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid;
+        }
+
+        .vs-black-box {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .vs-transparent {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .meme-container {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .workflow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .workflow-step {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            min-width: 150px;
+            font-weight: 600;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #4ade80;
+            margin: 0 1rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #4ade80;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ade80;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .agent-card {
+            background: linear-gradient(135deg, #312e81, #1e1b4b);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #4c1d95;
+            text-align: left;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .economic-impact {
+            background: linear-gradient(135deg, #059669, #047857);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tech-badge {
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .citation {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            border-left: 3px solid #4ade80;
+        }
+
+        .disclaimer {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid #ffa500;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.5rem; }
+            p, li { font-size: 1.1rem; }
+            .comparison-container { grid-template-columns: 1fr; }
+            .workflow-diagram { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+            .presentation-container { padding: 10px 0; }
+            .slide { width: 95%; padding: 10px 0; }
+            .navigation { 
+                bottom: 20px; 
+                padding: 8px 16px;
+                flex-wrap: wrap;
+            }
+            .nav-btn { 
+                padding: 10px 20px; 
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Answer42</h1>
+            <p class="subtitle">Revolutionary AI-Powered Academic Research Platform</p>
+            <div class="meme-container">
+                <h3>🚀 Where AI Meets Academic Excellence</h3>
+                <p>Built with AI-TDD principles for the next generation of research</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: The Problem - CORRECTED -->
+        <div class="slide">
+            <h2>The Academic Research Crisis</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">23%</div>
+                    <p>of researchers' time spent reading literature</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3.2M</div>
+                    <p>research papers published annually</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">21%</div>
+                    <p>of research papers remain uncited across all disciplines</p>
+                </div>
+            </div>
+            <p>Traditional research workflows are <span class="highlight">broken</span> in the AI era</p>
+            <div class="citation">
+                Sources: Paperpal (2024) - Early career researchers spend 23% of time reading; 
+                Nature (2017) - 21% of papers uncited in Web of Science database; 
+                Academic publishing studies confirm 3M+ annual publications
+            </div>
+        </div>
+
+        <!-- Slide 3: AI Policy Meme Integration -->
+        <div class="slide">
+            <h2>The Irony of AI Development</h2>
+            <div class="meme-container">
+                <h3>📋 Corporate AI Policies vs Reality</h3>
+                <div class="comparison-container">
+                    <div class="comparison-side vs-black-box">
+                        <h4>The Policy:</h4>
+                        <p>"We need AI in our IDE!"</p>
+                        <p>"I'll find the best AI developer!"</p>
+                    </div>
+                    <div class="comparison-side vs-transparent">
+                        <h4>The Reality:</h4>
+                        <p>"NO AI POLICY"</p>
+                        <p>"I can't use AI tools to build AI tools..."</p>
+                    </div>
+                </div>
+                <p><strong>Answer42 breaks this paradox</strong> - Built BY AI, FOR AI-powered research</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: What is Answer42? -->
+        <div class="slide">
+            <h2>What is Answer42?</h2>
+            <p class="subtitle">A sophisticated AI-powered platform for academic researchers, students, and scholars</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📚 Paper Management</h3>
+                    <p>Upload, analyze, and organize research papers with intelligent metadata extraction</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 Multi-AI Integration</h3>
+                    <p>Leverage OpenAI, Anthropic, and Perplexity APIs for comprehensive analysis</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔍 Smart Discovery</h3>
+                    <p>Intelligent paper discovery using Crossref and Semantic Scholar</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Multi-Agent Architecture -->
+        <div class="slide">
+            <h2>8 Specialized AI Agents</h2>
+            <p class="subtitle">Revolutionary multi-agent processing pipeline</p>
+            <div class="agent-grid">
+                <div class="agent-card">
+                    <h4>📄 Content Summarizer</h4>
+                    <p>Extracts key insights and findings</p>
+                </div>
+                <div class="agent-card">
+                    <h4>🧠 Concept Explainer</h4>
+                    <p>Breaks down complex academic concepts</p>
+                </div>
+                <div class="agent-card">
+                    <h4>✅ Quality Checker</h4>
+                    <p>Validates methodology and findings</p>
+                </div>
+                <div class="agent-card">
+                    <h4>📖 Citation Formatter</h4>
+                    <p>Automatic academic citation generation</p>
+                </div>
+                <div class="agent-card">
+                    <h4>🔗 Relationship Mapper</h4>
+                    <p>Identifies connections between papers</p>
+                </div>
+                <div class="agent-card">
+                    <h4>💡 Insight Generator</h4>
+                    <p>Discovers novel research opportunities</p>
+                </div>
+                <div class="agent-card">
+                    <h4>📊 Data Analyzer</h4>
+                    <p>Statistical analysis and visualization</p>
+                </div>
+                <div class="agent-card">
+                    <h4>🎯 Relevance Scorer</h4>
+                    <p>Ranks papers by research relevance</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Technology Stack -->
+        <div class="slide">
+            <h2>Enterprise-Grade Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-badge">Java 21</div>
+                <div class="tech-badge">Spring Boot 3.4.5</div>
+                <div class="tech-badge">Vaadin 24.7.3</div>
+                <div class="tech-badge">PostgreSQL</div>
+                <div class="tech-badge">Spring Batch</div>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🏗️ Robust Architecture</h3>
+                    <p>Enterprise-grade Spring ecosystem with proper dependency injection and AOP</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 Type Safety</h3>
+                    <p>Compile-time error detection eliminates entire categories of runtime errors</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Performance</h3>
+                    <p>Optimized for high-throughput academic paper processing workflows</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: AI-TDD Integration - UPDATED -->
+        <div class="slide">
+            <h2>AI-TDD Revolutionary Development</h2>
+            <p class="subtitle">Where Test-Driven Development meets AI acceleration</p>
+            <div class="workflow-diagram">
+                <div class="workflow-step">AI Generates Tests</div>
+                <div class="arrow">→</div>
+                <div class="workflow-step">Code Implementation</div>
+                <div class="arrow">→</div>
+                <div class="workflow-step">Automated Validation</div>
+                <div class="arrow">→</div>
+                <div class="workflow-step">Quality Gates</div>
+            </div>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">21-26%</div>
+                    <p>Faster development with AI assistance (context-dependent)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">90%</div>
+                    <p>Reduction in compilation errors</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">80%+</div>
+                    <p>Test coverage maintained</p>
+                </div>
+            </div>
+            <div class="disclaimer">
+                <strong>Note:</strong> AI productivity gains vary significantly by context and implementation. 
+                Recent studies show mixed results ranging from 19% slower to 66% faster depending on task complexity and developer experience.
+            </div>
+        </div>
+
+        <!-- Slide 8: From Chaos to Control -->
+        <div class="slide">
+            <h2>From Chaos to Control</h2>
+            <p class="subtitle">Mastering AI-Assisted Development Philosophy</p>
+            
+            <div class="comparison-container">
+                <div class="comparison-side vs-black-box">
+                    <h3>❌ Node.js/TypeScript Chaos</h3>
+                    <ul style="text-align: left; font-size: 1.2rem;">
+                        <li>Frequent runtime errors</li>
+                        <li>Inconsistent code patterns</li>
+                        <li>Difficult refactoring</li>
+                        <li>Poor AI code quality</li>
+                        <li>Endless refactor loops</li>
+                    </ul>
+                </div>
+                <div class="comparison-side vs-transparent">
+                    <h3>✅ Java/Spring Control</h3>
+                    <ul style="text-align: left; font-size: 1.2rem;">
+                        <li>90% reduction in compilation errors</li>
+                        <li>Consistent architectural patterns</li>
+                        <li>Safer refactoring with IDE support</li>
+                        <li>AI follows established conventions</li>
+                        <li>Quality gates enforce standards</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔄 The Interrupt Strategy</h3>
+                    <p>Read every AI response before accepting → Validate against standards → Request specific improvements rather than generic fixes</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Technology Stack as Guardrails</h3>
+                    <p>Strongly typed languages and mature frameworks force AI to naturally produce high-quality, maintainable code</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Quality Enforcement Implementation -->
+        <div class="slide">
+            <h2>Quality Enforcement in Action</h2>
+            <p class="subtitle">Answer42's Automated Quality Pipeline</p>
+
+            <div class="code-block">
+<strong>Answer42's Quality Enforcement Pipeline:</strong>
+
+<span style="color: #4ade80;">✓ Checkstyle:</span> Line length, braces, imports, modifiers
+<span style="color: #06b6d4;">✓ PMD Rules:</span> Complexity &lt; 10, no code duplication  
+<span style="color: #8b5cf6;">✓ SpotBugs:</span> Null pointer analysis, resource leaks
+<span style="color: #f59e0b;">✓ Pipeline:</span> Real-time → Pre-commit → CI/CD → Deploy
+
+<strong>Configuration Example:</strong>
+&lt;module name="TreeWalker"&gt;
+  &lt;module name="NeedBraces"/&gt;
+  &lt;module name="UnusedImports"/&gt;
+  &lt;module name="CyclomaticComplexity"&gt;
+    &lt;property name="max" value="10"/&gt;
+  &lt;/module&gt;
+&lt;/module&gt;
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🛡️ Automated Quality Gates</h3>
+                    <p>Comprehensive toolchain with 80%+ test coverage requirements ensures AI-generated code meets enterprise standards</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Measurable Success</h3>
+                    <p>Dramatic reduction in time from prompt to production-ready code while eliminating debugging cycles</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Black Box vs Transparent -->
+        <div class="slide">
+            <h2>AI Coding: Black Box vs Transparent</h2>
+            <div class="comparison-container">
+                <div class="comparison-side vs-black-box">
+                    <h3>❌ Copilot Approach</h3>
+                    <p><strong>"Trust me bro" 🤖</strong></p>
+                    <ul style="text-align: left;">
+                        <li>No visibility into reasoning process</li>
+                        <li>Hidden security flaws 🔒</li>
+                        <li>Race conditions lurking 🏃</li>
+                        <li>Edge cases ignored ⚡</li>
+                        <li>No insight into WHY it coded ❌</li>
+                    </ul>
+                    <p><strong>BLIND TRUST = PRODUCTION DISASTERS</strong></p>
+                </div>
+                <div class="comparison-side vs-transparent">
+                    <h3>✅ Cline + Sonnet</h3>
+                    <p><strong>"Here's my thinking..." 🧠</strong></p>
+                    <ul style="text-align: left;">
+                        <li>See reasoning step-by-step</li>
+                        <li>Pause each generation</li>
+                        <li>Review before execution</li>
+                        <li>Catch issues BEFORE code 🛡️</li>
+                        <li>Understand design decisions 💡</li>
+                        <li>Guide AI reasoning</li>
+                        <li>No blind trust required ✅</li>
+                    </ul>
+                    <p><strong>INFORMED OVERSIGHT = SOLID CODE</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Answer42 vs Gemini LangGraph -->
+        <div class="slide">
+            <h2>Answer42 vs Gemini LangGraph</h2>
+            <p class="subtitle">Enterprise Solution vs Lightweight Tool</p>
+            <div class="comparison-container">
+                <div class="comparison-side vs-black-box">
+                    <h3>Gemini LangGraph</h3>
+                    <ul style="text-align: left;">
+                        <li>General-purpose research assistant</li>
+                        <li>React/Python/FastAPI stack</li>
+                        <li>Single research agent</li>
+                        <li>Web search focus</li>
+                        <li>Redis/Postgres storage</li>
+                        <li>Learning-oriented project</li>
+                    </ul>
+                </div>
+                <div class="comparison-side vs-transparent">
+                    <h3>Answer42</h3>
+                    <ul style="text-align: left;">
+                        <li>Specialized academic platform</li>
+                        <li>Java/Spring/Vaadin enterprise stack</li>
+                        <li>8 specialized AI agents</li>
+                        <li>Academic paper focus</li>
+                        <li>PostgreSQL with JSONB</li>
+                        <li>Production-ready solution</li>
+                    </ul>
+                </div>
+            </div>
+            <p><strong>Answer42 is built for serious academic research workflows</strong></p>
+        </div>
+
+        <!-- Slide 12: Why Answer42 Wins -->
+        <div class="slide">
+            <h2>Why Answer42 Dominates</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🎯 Domain Specialization</h3>
+                    <p>Purpose-built for academic research with specialized agents and workflows vs generic web search</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏢 Enterprise Architecture</h3>
+                    <p>Spring Boot ecosystem with proper DI, AOP, and transaction management vs simple microservices</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 Multi-Agent Processing</h3>
+                    <p>8 specialized agents for comprehensive analysis vs single general-purpose agent</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Advanced Data Management</h3>
+                    <p>PostgreSQL with JSONB for complex academic metadata vs basic Redis/Postgres</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔍 Intelligent Discovery</h3>
+                    <p>Multi-source paper discovery via Crossref, Semantic Scholar, Perplexity vs basic Google Search</p>
+                </div>
+                <div class="feature-card">
+                    <h3>👥 Multi-Modal Chat</h3>
+                    <p>Three specialized chat modes with different AI providers vs single chat interface</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Economic Impact - UPDATED -->
+        <div class="slide">
+            <h2>AI-TDD Economic Revolution</h2>
+            <div class="economic-impact">
+                <h3>Projected Economic Impact Potential</h3>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number">$2.6-4.4T</div>
+                        <p>McKinsey estimate for generative AI value across industries</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100x</div>
+                        <p>Cost reduction by catching bugs early vs production</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">33%</div>
+                        <p>Average productivity gain per hour of AI usage (St. Louis Fed)</p>
+                    </div>
+                </div>
+            </div>
+            <p>Answer42 exemplifies this revolution in academic research software</p>
+            <div class="citation">
+                Sources: McKinsey Global Institute (2023), St. Louis Fed (2025), Industry productivity studies
+            </div>
+        </div>
+
+        <!-- Slide 14: Competitive Advantages -->
+        <div class="slide">
+            <h2>Enterprise Competitive Advantages</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>⚡ Development Velocity</h3>
+                    <p>Significant acceleration in development cycles through AI-TDD methodology</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎯 Quality Leadership</h3>
+                    <p>Near-zero production defects through comprehensive AI-generated testing</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚀 Innovation Focus</h3>
+                    <p>Developers spend time on research problems rather than debugging</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💎 Talent Attraction</h3>
+                    <p>Modern AI-assisted development environments attract top talent</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Implementation Framework -->
+        <div class="slide">
+            <h2>Implementation Roadmap</h2>
+            <div class="workflow-diagram">
+                <div class="workflow-step">Foundation Building</div>
+                <div class="arrow">→</div>
+                <div class="workflow-step">Integration & Optimization</div>
+                <div class="arrow">→</div>
+                <div class="workflow-step">Advanced AI-TDD</div>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Phase 1: Foundation</h3>
+                    <p>AI-powered test generation, team training, automated validation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Phase 2: Integration</h3>
+                    <p>CI/CD pipeline integration, domain-specific models, feedback optimization</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Phase 3: Advanced</h3>
+                    <p>Predictive defect detection, AI refactoring, self-healing test suites</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Research Discovery Challenges - CORRECTED -->
+        <div class="slide">
+            <h2>Research Discovery Challenges</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h4>The Discoverability Crisis</h4>
+                    <p>Academic research faces documented discovery challenges with traditional tools</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Citation Gaps</h4>
+                    <p>7-38% of papers never cited; up to 85% of datasets remain unused</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Knowledge Silos</h4>
+                    <p>Most research results never applied in practice despite quality</p>
+                </div>
+            </div>
+            <div class="meme-container">
+                <h3>🌑 The "Dark Knowledge" Problem</h3>
+                <p>Vast amounts of valuable research remain hidden due to discoverability barriers, not quality issues</p>
+            </div>
+            <div class="citation">
+                Sources: Kraker et al. (2021) "Discoverability Crisis"; Jeschke et al. (2019) "Dark Knowledge"; 
+                Nature (2017) citation analysis; Academic discoverability research
+            </div>
+        </div>
+
+        <!-- Slide 17: Answer42 Platform Features -->
+        <div class="slide">
+            <h2>Answer42 Platform Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📤 One-Click Upload</h3>
+                    <p>Drag-and-drop PDF upload with automatic metadata extraction</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 Three Chat Modes</h3>
+                    <p>OpenAI, Anthropic, and Perplexity specialized for different research needs</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💳 Credit Management</h3>
+                    <p>Sophisticated subscription and usage tracking system</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔍 Smart Discovery</h3>
+                    <p>Multi-source paper discovery using academic APIs</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Relationship Mapping</h3>
+                    <p>Advanced paper relationship analysis and visualization</p>
+                </div>
+                <div class="feature-card">
+                    <h3>☁️ Cloud Deployment</h3>
+                    <p>One-click deployment on Replit for instant access</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Target Users & Use Cases -->
+        <div class="slide">
+            <h2>Built for Academic Excellence</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🎓 Graduate Students</h3>
+                    <p>Literature reviews, thesis research, comprehensive paper analysis</p>
+                </div>
+                <div class="feature-card">
+                    <h3>👨‍🔬 Academic Researchers</h3>
+                    <p>Grant writing, collaboration discovery, methodology validation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📚 Scholars & Professors</h3>
+                    <p>Course preparation, research synthesis, academic writing</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏢 Research Institutions</h3>
+                    <p>Enterprise research management, team collaboration, knowledge sharing</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: ROI & Business Case - UPDATED -->
+        <div class="slide">
+            <h2>Return on Investment</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">75%</div>
+                    <p>Potential reduction in literature review time through AI assistance</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2-3x</div>
+                    <p>Projected increase in research productivity with proper tooling</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">90%</div>
+                    <p>Improvement in citation accuracy through automated formatting</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$10-50K+</div>
+                    <p>Estimated annual time savings value per researcher</p>
+                </div>
+            </div>
+            <div class="economic-impact">
+                <h3>The Business Case is Clear</h3>
+                <p>Answer42 transforms research efficiency while maintaining academic rigor through AI-TDD development practices</p>
+            </div>
+            <div class="disclaimer">
+                <strong>Note:</strong> ROI estimates are projections based on time-saving potential and industry productivity studies. 
+                Actual results will vary by institution and use case.
+            </div>
+        </div>
+
+        <!-- Slide 20: The Strategic Imperative -->
+        <div class="slide">
+            <h2>The Strategic Imperative</h2>
+            <p class="subtitle">Why Answer42 Represents the Future</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔬 Academic Research Revolution</h3>
+                    <p>AI-powered paper analysis transforms how scholars discover and synthesize knowledge</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Development Excellence</h3>
+                    <p>AI-TDD methodology ensures rapid innovation without sacrificing quality</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏆 Competitive Moats</h3>
+                    <p>Enterprise-grade architecture creates sustainable advantages over lightweight alternatives</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌐 Network Effects</h3>
+                    <p>Multi-agent processing and intelligent discovery create compounding value</p>
+                </div>
+            </div>
+            <p><strong>Organizations have a narrow window to establish AI-TDD capabilities before it becomes table stakes</strong></p>
+        </div>
+
+        <!-- Slide 21: Call to Action -->
+        <div class="slide">
+            <h1>Join the Research Revolution</h1>
+            <p class="subtitle">Answer42: Where AI-TDD meets Academic Excellence</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🚀 Get Started Today</h3>
+                    <p>One-click deployment on Replit</p>
+                    <p><strong>github.com/samjd-zz/answer42</strong></p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤝 Enterprise Partnerships</h3>
+                    <p>Custom deployment and integration</p>
+                    <p><strong>Contact us for institutional licensing</strong></p>
+                </div>
+                <div class="feature-card">
+                    <h3>💡 Developer Community</h3>
+                    <p>Contribute to the AI-TDD revolution</p>
+                    <p><strong>Open source collaboration welcome</strong></p>
+                </div>
+            </div>
+            <div class="economic-impact">
+                <h2>The question isn't whether AI-TDD will revolutionize academic research</h2>
+                <h2>It's whether your organization will lead this revolution or be left behind</h2>
+            </div>
+            
+            <!-- CORRECTED STATISTICS SUMMARY -->
+            <div class="meme-container" style="margin-top: 2rem;">
+                <h3>📊 Key Statistics Sources</h3>
+                <div style="text-align: left; font-size: 1rem; color: #94a3b8;">
+                    <p><strong>Research Volume:</strong> 2-3M+ papers annually (Web of Science, academic publishing studies)</p>
+                    <p><strong>Reading Time:</strong> 23% of researcher time spent on literature (Paperpal, 2024)</p>
+                    <p><strong>Citation Gaps:</strong> 21% uncited across disciplines, 7-38% by field (Nature, 2017)</p>
+                    <p><strong>Dataset Usage:</strong> Up to 85% of datasets never cited (academic studies)</p>
+                    <p><strong>AI Productivity:</strong> 21-66% gains context-dependent (multiple studies, 2024-2025)</p>
+                    <p><strong>Discoverability Crisis:</strong> Well-documented challenge (Kraker et al., 2021)</p>
+                    <p><strong>Dark Knowledge:</strong> Concept by Jeschke et al. (2019) - inaccessible research</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let startX = 0;
+        let endX = 0;
+
+        document.addEventListener('touchstart', e => {
+            startX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            endX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (endX < startX - 50) {
+                nextSlide();
+            }
+            if (endX > startX + 50) {
+                previousSlide();
+            }
+        }
+
+        // Preload animation optimization
+        document.addEventListener('DOMContentLoaded', function() {
+            slides.forEach(slide => {
+                slide.style.transition = 'opacity 0.6s ease-in-out';
+            });
+        });
+    </script>
+</body>
+</html>
