@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Calendar - Fall 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 10s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #5a67d8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e9d8fd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .event-item, .course-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-item::before, .course-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .event-item:hover::before, .course-item:hover::before {
+            left: 100%;
+        }
+
+        .event-item:hover, .course-item:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, #ffffff, #f7fafc);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .event-date, .course-code {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .event-name, .course-name {
+            color: #4a5568;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .event-status.special {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .course-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .detail-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .online-badge {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .time-badge {
+            background: #fbb6ce;
+            color: #702459;
+        }
+
+        .room-badge {
+            background: #fed7aa;
+            color: #7c2d12;
+        }
+
+        .weekly-schedule {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .day-column {
+            background: linear-gradient(180deg, #f7fafc, #edf2f7);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .day-column:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .day-header {
+            font-weight: 600;
+            color: #5a67d8;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9d8fd;
+            margin-bottom: 15px;
+        }
+
+        .class-block {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .class-block:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .class-time {
+            font-size: 0.85em;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .class-code {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .class-room {
+            font-size: 0.85em;
+            color: #a0aec0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Academic Calendar</h1>
+            <p>AI Software Development - Fall 2025</p>
+        </div>
+
+        <div class="calendar-grid">
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">📅</span>
+                    Important Dates
+                </h2>
+                
+                <div class="event-item">
+                    <div class="event-date">September 1, 2025</div>
+                    <div class="event-name">Labour Day</div>
+                    <span class="event-status">College Closed</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">September 2, 2025</div>
+                    <div class="event-name">AC Day 1</div>
+                    <span class="event-status special">Special Event</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">October 13, 2025</div>
+                    <div class="event-name">Thanksgiving Day</div>
+                    <span class="event-status">College Closed</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">October 20-24, 2025</div>
+                    <div class="event-name">Mid-Term Break</div>
+                    <span class="event-status special">Break Week</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">December 25, 2025</div>
+                    <div class="event-name">Christmas Day</div>
+                    <span class="event-status">College Closed</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">December 26, 2025</div>
+                    <div class="event-name">Boxing Day</div>
+                    <span class="event-status">College Closed</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">Dec 27-31, 2025</div>
+                    <div class="event-name">Christmas Break</div>
+                    <span class="event-status">College Closed</span>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">January 1, 2026</div>
+                    <div class="event-name">New Year's Day</div>
+                    <span class="event-status">College Closed</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">💻</span>
+                    Online Courses
+                </h2>
+                
+                <div class="course-item">
+                    <div class="course-code">CST8502-300</div>
+                    <div class="course-name">Sep 2 - Dec 14</div>
+                    <div class="course-details">
+                        <span class="detail-badge online-badge">Online</span>
+                    </div>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-code">CST8503-300</div>
+                    <div class="course-name">Sep 2 - Dec 14</div>
+                    <div class="course-details">
+                        <span class="detail-badge online-badge">Online</span>
+                    </div>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-code">CST8504-300</div>
+                    <div class="course-name">Sep 2 - Dec 14</div>
+                    <div class="course-details">
+                        <span class="detail-badge online-badge">Online</span>
+                    </div>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-code">GEP1001-312</div>
+                    <div class="course-name">Sep 2 - Nov 28</div>
+                    <div class="course-details">
+                        <span class="detail-badge online-badge">Online</span>
+                    </div>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-code">PHI4005-300</div>
+                    <div class="course-name">Sep 2 - Dec 14</div>
+                    <div class="course-details">
+                        <span class="detail-badge online-badge">Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weekly-schedule">
+            <h2 class="section-title">
+                <span class="icon">🗓️</span>
+                Weekly Class Schedule
+            </h2>
+            
+            <div class="schedule-grid">
+                <div class="day-column">
+                    <div class="day-header">Monday</div>
+                    <div class="class-block">
+                        <div class="class-time">17:00</div>
+                        <div class="class-code">CST8505-300 Theory</div>
+                        <div class="class-room">Room: WT125</div>
+                    </div>
+                    <div class="class-block">
+                        <div class="class-time">19:00</div>
+                        <div class="class-code">CST8505-300 Lab</div>
+                        <div class="class-room">Room: WT125</div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">Tuesday</div>
+                    <div style="text-align: center; color: #a0aec0; padding: 20px;">
+                        No Classes
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">Wednesday</div>
+                    <div class="class-block">
+                        <div class="class-time">09:00</div>
+                        <div class="class-code">CST8504-300 Theory</div>
+                        <div class="class-room">Room: CA412</div>
+                    </div>
+                    <div class="class-block">
+                        <div class="class-time">15:00</div>
+                        <div class="class-code">CST8504-301 Lab</div>
+                        <div class="class-room">Room: WB410</div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">Thursday</div>
+                    <div class="class-block">
+                        <div class="class-time">11:30</div>
+                        <div class="class-code">CST8503-301 Lab</div>
+                        <div class="class-room">Room: WB182</div>
+                    </div>
+                    <div class="class-block">
+                        <div class="class-time">14:00</div>
+                        <div class="class-code">CST8503-300 Theory</div>
+                        <div class="class-room">Room: A1120</div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">Friday</div>
+                    <div class="class-block pulse">
+                        <div class="class-time">11:30*</div>
+                        <div class="class-code">GEP1001-312 Theory</div>
+                        <div class="class-room">VIRTUAL</div>
+                        <div style="font-size: 0.75em; color: #e53e3e; margin-top: 5px;">
+                            *Sep 12, Oct 10, Nov 7 only
+                        </div>
+                    </div>
+                    <div class="class-block">
+                        <div class="class-time">15:30</div>
+                        <div class="class-code">CST8502-300 Theory</div>
+                        <div class="class-room">Room: WT117</div>
+                    </div>
+                    <div class="class-block">
+                        <div class="class-time">17:30</div>
+                        <div class="class-code">CST8502-301 Lab</div>
+                        <div class="class-room">Room: WT334</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
