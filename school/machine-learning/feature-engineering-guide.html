@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Engineering Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+            --gradient: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #10b981 100%);
+            --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --gradient-cool: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--gradient);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.4), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(6, 182, 212, 0.3), transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(1deg); }
+            66% { transform: translate(-20px, 20px) rotate(-1deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient);
+            opacity: 0.05;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            position: relative;
+        }
+
+        .subtitle {
+            color: var(--text);
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            justify-content: center;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--gradient);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .tab-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .tab-button.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            transition: left 0.5s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+        }
+
+        .card:hover::before {
+            left: 0;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        h3 {
+            color: var(--dark);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        h4 {
+            color: var(--primary-dark);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-item:hover::after {
+            opacity: 0.1;
+        }
+
+        .feature-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item p {
+            position: relative;
+            z-index: 1;
+        }
+
+        .code-block {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
+            padding: 2rem;
+            border-radius: 15px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            margin: 1.5rem 0;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--gradient);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 600;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .process-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .technique-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .technique-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .technique-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        .technique-card:hover::before {
+            left: 100%;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+            font-weight: 600;
+        }
+
+        .badge.warning {
+            background: var(--gradient-warm);
+        }
+
+        .badge.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .badge.info {
+            background: var(--gradient-cool);
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 1rem 1rem 1rem 3rem;
+            margin: 0.75rem 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 4px solid var(--success);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 1rem;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .checklist li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+            border: 2px solid #fbbf24;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.2);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: var(--gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .metric-card strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #ef4444;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            padding-left: 4rem;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            padding-left: 4rem;
+        }
+
+        .tip-box::before {
+            content: '💡';
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .example-header {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .example-content {
+            padding: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Feature Engineering Mastery</h1>
+            <p class="subtitle">Complete Guide to Creating Powerful Features for Machine Learning</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')"><span>Overview</span></button>
+            <button class="tab-button" onclick="showTab('process')"><span>Process</span></button>
+            <button class="tab-button" onclick="showTab('numeric')"><span>Numeric</span></button>
+            <button class="tab-button" onclick="showTab('categorical')"><span>Categorical</span></button>
+            <button class="tab-button" onclick="showTab('temporal')"><span>Temporal</span></button>
+            <button class="tab-button" onclick="showTab('text')"><span>Text & NLP</span></button>
+            <button class="tab-button" onclick="showTab('advanced')"><span>Advanced</span></button>
+            <button class="tab-button" onclick="showTab('validation')"><span>Validation</span></button>
+            <button class="tab-button" onclick="showTab('tools')"><span>Tools</span></button>
+        </nav>
+
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>What is Feature Engineering?</h2>
+                <p>Feature engineering is the process of transforming raw data into features that better represent the underlying problem to predictive models, resulting in improved model accuracy. It's often said that <strong>"data and features determine the upper bound of machine learning, while models and algorithms only approach this limit."</strong></p>
+                
+                <div class="tip-box">
+                    <strong>Pro Tip:</strong> Feature engineering is often more impactful than algorithm selection. A simple model with excellent features usually outperforms a complex model with poor features.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Why Feature Engineering Matters</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <strong>70-80%</strong>
+                        Time spent in ML projects
+                    </div>
+                    <div class="metric-card">
+                        <strong>2-10x</strong>
+                        Performance improvement
+                    </div>
+                    <div class="metric-card">
+                        <strong>50%+</strong>
+                        Error reduction possible
+                    </div>
+                    <div class="metric-card">
+                        <strong>#1</strong>
+                        Factor in competition wins
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Core Principles</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Domain Knowledge</strong>
+                        <p>Understanding the business context and problem domain guides creation of meaningful features</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Data Understanding</strong>
+                        <p>Thoroughly explore data distributions, patterns, and relationships before engineering</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Iterative Process</strong>
+                        <p>Feature engineering is experimental - create, test, refine, and repeat</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Avoid Leakage</strong>
+                        <p>Ensure features only use information available at prediction time</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Interpretability</strong>
+                        <p>Balance complex features with model interpretability needs</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Computational Cost</strong>
+                        <p>Consider the trade-off between feature complexity and computation time</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Feature Types Overview</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Examples</th>
+                            <th>Common Techniques</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Numeric</strong></td>
+                            <td>Continuous or discrete numbers</td>
+                            <td>Age, price, temperature</td>
+                            <td>Scaling, binning, polynomial</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Categorical</strong></td>
+                            <td>Discrete categories or classes</td>
+                            <td>Color, country, product type</td>
+                            <td>Encoding, embeddings</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Temporal</strong></td>
+                            <td>Time-based data</td>
+                            <td>Timestamps, dates, durations</td>
+                            <td>Decomposition, lag features</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Text</strong></td>
+                            <td>Unstructured text data</td>
+                            <td>Reviews, descriptions, names</td>
+                            <td>TF-IDF, embeddings, sentiment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Spatial</strong></td>
+                            <td>Geographic or coordinate data</td>
+                            <td>Latitude, longitude, addresses</td>
+                            <td>Distance, clustering, regions</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="process" class="content-section">
+            <div class="card">
+                <h2>Feature Engineering Process</h2>
+                <div class="process-flow">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <h4>Understand</h4>
+                        <p>Domain & Data</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <h4>Explore</h4>
+                        <p>EDA & Patterns</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <h4>Create</h4>
+                        <p>Generate Features</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <h4>Select</h4>
+                        <p>Important Features</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">5</div>
+                        <h4>Validate</h4>
+                        <p>Test & Monitor</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Step 1: Understanding the Problem</h2>
+                <ul class="checklist">
+                    <li>Define the business objective and success metrics</li>
+                    <li>Identify target variable and prediction timeframe</li>
+                    <li>Understand data generation process and collection methods</li>
+                    <li>Interview domain experts and stakeholders</li>
+                    <li>Research similar problems and solutions</li>
+                    <li>Document assumptions and constraints</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Step 2: Exploratory Data Analysis</h2>
+                <div class="technique-card">
+                    <h4>Statistical Analysis</h4>
+                    <ul>
+                        <li>Distribution analysis (histograms, box plots)</li>
+                        <li>Summary statistics (mean, median, mode, variance)</li>
+                        <li>Correlation analysis (Pearson, Spearman)</li>
+                        <li>Missing value patterns</li>
+                        <li>Outlier detection</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Visual Analysis</h4>
+                    <ul>
+                        <li>Scatter plots for relationships</li>
+                        <li>Time series plots for temporal patterns</li>
+                        <li>Heatmaps for correlations</li>
+                        <li>Distribution plots by target class</li>
+                        <li>Parallel coordinates for high-dimensional data</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Basic EDA workflow
+def explore_dataset(df):
+    # Basic info
+    print(f"Shape: {df.shape}")
+    print(f"Memory: {df.memory_usage().sum() / 1024**2:.2f} MB")
+    
+    # Missing values
+    missing = df.isnull().sum()
+    missing_pct = 100 * missing / len(df)
+    
+    # Statistical summary
+    stats = df.describe(include='all')
+    
+    # Correlation matrix
+    corr_matrix = df.select_dtypes(include=[np.number]).corr()
+    
+    # Distribution plots
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    # ... plotting code
+    
+    return stats, missing_pct, corr_matrix
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Step 3: Feature Creation Strategies</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Aggregation</strong>
+                        <p>Combine multiple values: sum, mean, max, min, count, std</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Transformation</strong>
+                        <p>Mathematical operations: log, sqrt, polynomial, reciprocal</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Interaction</strong>
+                        <p>Combine features: multiplication, division, addition</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Decomposition</strong>
+                        <p>Split complex features: date → year, month, day, weekday</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Binning</strong>
+                        <p>Group continuous values: age groups, price ranges</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Encoding</strong>
+                        <p>Convert categories: one-hot, target, ordinal encoding</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Step 4: Feature Selection Methods</h2>
+                <div class="example-grid">
+                    <div class="example-card">
+                        <div class="example-header">Filter Methods</div>
+                        <div class="example-content">
+                            <ul>
+                                <li>Variance threshold</li>
+                                <li>Correlation threshold</li>
+                                <li>Chi-square test</li>
+                                <li>Information gain</li>
+                                <li>ANOVA F-test</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-header">Wrapper Methods</div>
+                        <div class="example-content">
+                            <ul>
+                                <li>Forward selection</li>
+                                <li>Backward elimination</li>
+                                <li>Recursive feature elimination</li>
+                                <li>Genetic algorithms</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-header">Embedded Methods</div>
+                        <div class="example-content">
+                            <ul>
+                                <li>LASSO (L1) regularization</li>
+                                <li>Ridge (L2) regularization</li>
+                                <li>Elastic Net</li>
+                                <li>Tree-based importance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="numeric" class="content-section">
+            <div class="card">
+                <h2>Numeric Feature Engineering</h2>
+                <p>Numeric features are the foundation of most ML models. Proper transformation and scaling can significantly improve model performance.</p>
+            </div>
+
+            <div class="card">
+                <h2>Scaling and Normalization</h2>
+                
+                <div class="technique-card">
+                    <h4>StandardScaler (Z-score Normalization)</h4>
+                    <div class="formula-box">
+                        z = (x - μ) / σ
+                    </div>
+                    <p>Use when: Features are normally distributed, algorithms assume standardized data (SVM, neural networks)</p>
+                </div>
+
+                <div class="technique-card">
+                    <h4>MinMaxScaler</h4>
+                    <div class="formula-box">
+                        x_scaled = (x - min) / (max - min)
+                    </div>
+                    <p>Use when: Features have known bounds, need values in [0,1] range</p>
+                </div>
+
+                <div class="technique-card">
+                    <h4>RobustScaler</h4>
+                    <div class="formula-box">
+                        x_scaled = (x - median) / IQR
+                    </div>
+                    <p>Use when: Data contains outliers, need robust scaling</p>
+                </div>
+
+                <div class="code-block" data-language="Python">
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.preprocessing import PowerTransformer, QuantileTransformer
+
+# Different scaling techniques
+def scale_features(X):
+    scalers = {
+        'standard': StandardScaler(),
+        'minmax': MinMaxScaler(),
+        'robust': RobustScaler(),
+        'power': PowerTransformer(method='yeo-johnson'),
+        'quantile': QuantileTransformer(output_distribution='normal')
+    }
+    
+    scaled_data = {}
+    for name, scaler in scalers.items():
+        scaled_data[name] = scaler.fit_transform(X)
+    
+    return scaled_data
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Mathematical Transformations</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Log Transform</strong>
+                        <p>Reduces skewness, handles exponential growth: log(x + 1)</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Square Root</strong>
+                        <p>Moderate skewness reduction: sqrt(x)</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Reciprocal</strong>
+                        <p>Inverse relationships: 1/x</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Box-Cox</strong>
+                        <p>Automatic power transformation for normality</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Polynomial</strong>
+                        <p>Capture non-linear relationships: x², x³</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Trigonometric</strong>
+                        <p>Cyclical patterns: sin(x), cos(x)</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Warning:</strong> Always handle edge cases (zero, negative values) when applying mathematical transformations. Add small constants or use appropriate variants (log1p instead of log).
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Binning and Discretization</h2>
+                
+                <div class="technique-card">
+                    <h4>Equal Width Binning</h4>
+                    <p>Divides range into equal-sized intervals</p>
+                    <ul>
+                        <li>Simple and interpretable</li>
+                        <li>May create imbalanced bins</li>
+                        <li>Sensitive to outliers</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Equal Frequency Binning (Quantiles)</h4>
+                    <p>Each bin contains approximately same number of samples</p>
+                    <ul>
+                        <li>Balanced bin sizes</li>
+                        <li>Better for skewed distributions</li>
+                        <li>Boundaries may not be intuitive</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Custom Domain-Based Binning</h4>
+                    <p>Bins based on domain knowledge</p>
+                    <ul>
+                        <li>Most interpretable</li>
+                        <li>Incorporates business logic</li>
+                        <li>Examples: age groups, income brackets</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+# Binning examples
+def create_bins(df, column):
+    # Equal width
+    df[f'{column}_equal_width'] = pd.cut(df[column], bins=5)
+    
+    # Quantile-based
+    df[f'{column}_quantile'] = pd.qcut(df[column], q=5)
+    
+    # Custom bins (example for age)
+    age_bins = [0, 18, 25, 35, 50, 65, 100]
+    age_labels = ['<18', '18-24', '25-34', '35-49', '50-64', '65+']
+    df['age_group'] = pd.cut(df['age'], bins=age_bins, labels=age_labels)
+    
+    return df
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Outlier Handling</h2>
+                
+                <div class="example-grid">
+                    <div class="example-card">
+                        <div class="example-header">Detection Methods</div>
+                        <div class="example-content">
+                            <ul>
+                                <li>IQR method (Q1-1.5*IQR, Q3+1.5*IQR)</li>
+                                <li>Z-score (|z| > 3)</li>
+                                <li>Isolation Forest</li>
+                                <li>Local Outlier Factor</li>
+                                <li>DBSCAN clustering</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-header">Treatment Methods</div>
+                        <div class="example-content">
+                            <ul>
+                                <li>Capping (winsorization)</li>
+                                <li>Transformation (log, sqrt)</li>
+                                <li>Binning</li>
+                                <li>Separate model for outliers</li>
+                                <li>Remove (if justified)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="categorical" class="content-section">
+            <div class="card">
+                <h2>Categorical Feature Engineering</h2>
+                <p>Categorical variables require special handling as most ML algorithms work with numeric inputs. The encoding method can significantly impact model performance.</p>
+            </div>
+
+            <div class="card">
+                <h2>Encoding Techniques</h2>
+                
+                <div class="technique-card">
+                    <h4>One-Hot Encoding</h4>
+                    <p>Creates binary columns for each category</p>
+                    <div class="badge success">Pros</div>
+                    <ul>
+                        <li>No ordinal assumption</li>
+                        <li>Works with all algorithms</li>
+                        <li>Interpretable</li>
+                    </ul>
+                    <div class="badge warning">Cons</div>
+                    <ul>
+                        <li>High dimensionality for high cardinality</li>
+                        <li>Sparse matrices</li>
+                        <li>Doesn't capture relationships</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Label Encoding</h4>
+                    <p>Assigns unique integer to each category</p>
+                    <div class="badge success">When to use</div>
+                    <ul>
+                        <li>Ordinal categories (low, medium, high)</li>
+                        <li>Tree-based algorithms</li>
+                        <li>Memory constraints</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Target Encoding (Mean Encoding)</h4>
+                    <p>Replace category with target mean</p>
+                    <div class="formula-box">
+                        encoded_value = P(target=1 | category)
+                    </div>
+                    <div class="badge warning">Important</div>
+                    <ul>
+                        <li>Use cross-validation or smoothing to prevent overfitting</li>
+                        <li>Very powerful for high cardinality</li>
+                        <li>Can leak information if not careful</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+import category_encoders as ce
+
+def encode_categorical(X_train, X_test, y_train, cat_columns):
+    encoders = {}
+    
+    # One-hot encoding
+    ohe = ce.OneHotEncoder(cols=cat_columns, use_cat_names=True)
+    X_train_ohe = ohe.fit_transform(X_train)
+    X_test_ohe = ohe.transform(X_test)
+    
+    # Target encoding with smoothing
+    te = ce.TargetEncoder(cols=cat_columns, smoothing=1.0)
+    X_train_te = te.fit_transform(X_train, y_train)
+    X_test_te = te.transform(X_test)
+    
+    # Binary encoding (for high cardinality)
+    be = ce.BinaryEncoder(cols=cat_columns)
+    X_train_be = be.fit_transform(X_train)
+    X_test_be = be.transform(X_test)
+    
+    return X_train_ohe, X_test_ohe, X_train_te, X_test_te
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Advanced Categorical Techniques</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Frequency Encoding</strong>
+                        <p>Replace category with its frequency/count in the dataset</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Binary Encoding</strong>
+                        <p>Convert to binary and split into separate columns</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Hash Encoding</strong>
+                        <p>Use hash function to map to fixed dimensions</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Embedding</strong>
+                        <p>Learn dense representations (neural networks)</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Leave-One-Out</strong>
+                        <p>Target encode excluding current row</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>CatBoost Encoding</strong>
+                        <p>Ordered target statistics</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Handling High Cardinality</h2>
+                
+                <div class="tip-box">
+                    <strong>Strategy Guide:</strong>
+                    <ul>
+                        <li><strong>&lt; 10 categories:</strong> One-hot encoding</li>
+                        <li><strong>10-100 categories:</strong> Target encoding or binary encoding</li>
+                        <li><strong>&gt; 100 categories:</strong> Embeddings, hashing, or feature clustering</li>
+                        <li><strong>Text-like:</strong> Create frequency groups or use NLP techniques</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+def handle_high_cardinality(df, column, threshold=100):
+    value_counts = df[column].value_counts()
+    
+    if len(value_counts) > threshold:
+        # Keep top N categories, group rest as 'Other'
+        top_categories = value_counts.head(threshold).index
+        df[f'{column}_grouped'] = df[column].where(
+            df[column].isin(top_categories), 'Other'
+        )
+        
+        # Frequency encoding for original
+        df[f'{column}_freq'] = df[column].map(value_counts)
+        
+        # Create rare flag
+        df[f'{column}_is_rare'] = ~df[column].isin(top_categories)
+    
+    return df
+                </div>
+            </div>
+        </div>
+
+        <div id="temporal" class="content-section">
+            <div class="card">
+                <h2>Temporal Feature Engineering</h2>
+                <p>Time-based features capture trends, seasonality, and temporal patterns crucial for many prediction tasks.</p>
+            </div>
+
+            <div class="card">
+                <h2>Date/Time Decomposition</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Basic Components</strong>
+                        <p>Year, month, day, hour, minute, second</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Cyclical Features</strong>
+                        <p>Day of week, day of month, month of year, quarter</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Flags</strong>
+                        <p>Weekend, holiday, business day, month/quarter end</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Relative Time</strong>
+                        <p>Days since event, time until deadline, age</p>
+                    </div>
+                </div>
+
+                <div class="code-block" data-language="Python">
+def extract_datetime_features(df, date_column):
+    df['year'] = df[date_column].dt.year
+    df['month'] = df[date_column].dt.month
+    df['day'] = df[date_column].dt.day
+    df['dayofweek'] = df[date_column].dt.dayofweek
+    df['quarter'] = df[date_column].dt.quarter
+    df['dayofyear'] = df[date_column].dt.dayofyear
+    df['weekofyear'] = df[date_column].dt.isocalendar().week
+    
+    # Cyclical encoding
+    df['month_sin'] = np.sin(2 * np.pi * df['month'] / 12)
+    df['month_cos'] = np.cos(2 * np.pi * df['month'] / 12)
+    df['day_sin'] = np.sin(2 * np.pi * df['day'] / 31)
+    df['day_cos'] = np.cos(2 * np.pi * df['day'] / 31)
+    
+    # Flags
+    df['is_weekend'] = df['dayofweek'].isin([5, 6]).astype(int)
+    df['is_month_start'] = df[date_column].dt.is_month_start.astype(int)
+    df['is_month_end'] = df[date_column].dt.is_month_end.astype(int)
+    
+    return df
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Time Series Features</h2>
+                
+                <div class="technique-card">
+                    <h4>Lag Features</h4>
+                    <p>Previous values at different time steps</p>
+                    <ul>
+                        <li>Simple lags: value at t-1, t-2, t-7, etc.</li>
+                        <li>Seasonal lags: same day last week/month/year</li>
+                        <li>Multiple lag combinations</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Rolling Statistics</h4>
+                    <p>Aggregations over time windows</p>
+                    <ul>
+                        <li>Rolling mean, median, std</li>
+                        <li>Rolling min, max</li>
+                        <li>Expanding windows</li>
+                        <li>Exponential weighted averages</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Trend Features</h4>
+                    <p>Capture direction and rate of change</p>
+                    <ul>
+                        <li>Differences: value - lag_value</li>
+                        <li>Percent change</li>
+                        <li>Linear trend coefficient</li>
+                        <li>Acceleration (second derivative)</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+def create_time_series_features(df, value_col, date_col):
+    df = df.sort_values(date_col)
+    
+    # Lag features
+    for lag in [1, 7, 14, 30]:
+        df[f'lag_{lag}'] = df[value_col].shift(lag)
+    
+    # Rolling statistics
+    for window in [7, 14, 30]:
+        df[f'rolling_mean_{window}'] = df[value_col].rolling(window).mean()
+        df[f'rolling_std_{window}'] = df[value_col].rolling(window).std()
+        df[f'rolling_max_{window}'] = df[value_col].rolling(window).max()
+        df[f'rolling_min_{window}'] = df[value_col].rolling(window).min()
+    
+    # Expanding features
+    df['expanding_mean'] = df[value_col].expanding().mean()
+    
+    # Differences and changes
+    df['diff_1'] = df[value_col].diff(1)
+    df['diff_7'] = df[value_col].diff(7)
+    df['pct_change_1'] = df[value_col].pct_change(1)
+    df['pct_change_7'] = df[value_col].pct_change(7)
+    
+    return df
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Seasonality and Cyclical Patterns</h2>
+                
+                <div class="warning-box">
+                    <strong>Important:</strong> Use sine and cosine transformations for cyclical features to preserve continuity (e.g., day 31 should be close to day 1, hour 23 close to hour 0).
+                </div>
+
+                <div class="formula-box">
+                    sin_component = sin(2π × value / period)<br>
+                    cos_component = cos(2π × value / period)
+                </div>
+
+                <div class="example-grid">
+                    <div class="example-card">
+                        <div class="example-header">Common Periods</div>
+                        <div class="example-content">
+                            <ul>
+                                <li><strong>Hour:</strong> period = 24</li>
+                                <li><strong>Day of Week:</strong> period = 7</li>
+                                <li><strong>Day of Month:</strong> period = 30/31</li>
+                                <li><strong>Month:</strong> period = 12</li>
+                                <li><strong>Quarter:</strong> period = 4</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="text" class="content-section">
+            <div class="card">
+                <h2>Text Feature Engineering</h2>
+                <p>Transform unstructured text into numerical features that capture semantic meaning and patterns.</p>
+            </div>
+
+            <div class="card">
+                <h2>Basic Text Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Length Features</strong>
+                        <p>Character count, word count, sentence count, avg word length</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Composition</strong>
+                        <p>Uppercase ratio, digit ratio, punctuation ratio, space ratio</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Diversity</strong>
+                        <p>Unique words, vocabulary richness, lexical diversity</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Special Patterns</strong>
+                        <p>URLs, emails, hashtags, mentions, phone numbers</p>
+                    </div>
+                </div>
+
+                <div class="code-block" data-language="Python">
+import re
+from collections import Counter
+
+def extract_text_features(text):
+    features = {}
+    
+    # Length features
+    features['char_count'] = len(text)
+    features['word_count'] = len(text.split())
+    features['sentence_count'] = len(re.split(r'[.!?]+', text))
+    features['avg_word_length'] = np.mean([len(word) for word in text.split()])
+    
+    # Composition
+    features['upper_ratio'] = sum(1 for c in text if c.isupper()) / len(text)
+    features['digit_ratio'] = sum(1 for c in text if c.isdigit()) / len(text)
+    features['special_char_ratio'] = len(re.findall(r'[^a-zA-Z0-9\s]', text)) / len(text)
+    
+    # Patterns
+    features['url_count'] = len(re.findall(r'https?://\S+', text))
+    features['email_count'] = len(re.findall(r'\S+@\S+', text))
+    features['hashtag_count'] = len(re.findall(r'#\w+', text))
+    
+    return features
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Vectorization Techniques</h2>
+                
+                <div class="technique-card">
+                    <h4>Bag of Words (BoW)</h4>
+                    <p>Count occurrence of each word</p>
+                    <ul>
+                        <li>Simple and interpretable</li>
+                        <li>Loses word order</li>
+                        <li>High dimensionality</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>TF-IDF</h4>
+                    <div class="formula-box">
+                        TF-IDF = TF(t,d) × log(N / DF(t))
+                    </div>
+                    <p>Weights words by importance</p>
+                    <ul>
+                        <li>Reduces impact of common words</li>
+                        <li>Highlights discriminative terms</li>
+                        <li>Better for classification</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Word Embeddings</h4>
+                    <p>Dense vector representations</p>
+                    <ul>
+                        <li><strong>Word2Vec:</strong> Skip-gram, CBOW</li>
+                        <li><strong>GloVe:</strong> Global vectors</li>
+                        <li><strong>FastText:</strong> Subword information</li>
+                        <li><strong>Transformers:</strong> BERT, GPT, RoBERTa</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from gensim.models import Word2Vec
+import numpy as np
+
+def vectorize_text(texts):
+    # TF-IDF
+    tfidf = TfidfVectorizer(max_features=1000, ngram_range=(1, 2))
+    tfidf_features = tfidf.fit_transform(texts)
+    
+    # Word2Vec average
+    sentences = [text.split() for text in texts]
+    w2v_model = Word2Vec(sentences, vector_size=100, window=5, min_count=1)
+    
+    def get_avg_w2v(sentence, model):
+        vectors = [model.wv[word] for word in sentence if word in model.wv]
+        return np.mean(vectors, axis=0) if vectors else np.zeros(model.vector_size)
+    
+    w2v_features = np.array([get_avg_w2v(sent, w2v_model) for sent in sentences])
+    
+    return tfidf_features, w2v_features
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Advanced NLP Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Sentiment Analysis</strong>
+                        <p>Polarity score, subjectivity, emotion detection</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Named Entity Recognition</strong>
+                        <p>Person, location, organization counts</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>POS Tagging</strong>
+                        <p>Noun, verb, adjective distributions</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Topic Modeling</strong>
+                        <p>LDA, LSA topic distributions</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Readability Scores</strong>
+                        <p>Flesch score, Gunning fog index</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>N-grams</strong>
+                        <p>Bigrams, trigrams, character n-grams</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="advanced" class="content-section">
+            <div class="card">
+                <h2>Advanced Feature Engineering Techniques</h2>
+                <p>Sophisticated methods for creating powerful features that capture complex patterns and relationships.</p>
+            </div>
+
+            <div class="card">
+                <h2>Feature Interactions</h2>
+                
+                <div class="technique-card">
+                    <h4>Polynomial Features</h4>
+                    <p>Create interaction terms and polynomial combinations</p>
+                    <div class="formula-box">
+                        (x₁, x₂) → (1, x₁, x₂, x₁², x₁x₂, x₂²)
+                    </div>
+                    <ul>
+                        <li>Captures non-linear relationships</li>
+                        <li>Can lead to overfitting</li>
+                        <li>Increases dimensionality rapidly</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card">
+                    <h4>Feature Crosses</h4>
+                    <p>Combine categorical features</p>
+                    <ul>
+                        <li>Example: city_X_category = "NYC_Electronics"</li>
+                        <li>Powerful for capturing joint effects</li>
+                        <li>Use with regularization</li>
+                    </ul>
+                </div>
+
+                <div class="code-block" data-language="Python">
+from sklearn.preprocessing import PolynomialFeatures
+from itertools import combinations
+
+def create_interactions(df, numeric_cols, categorical_cols):
+    # Polynomial features for numeric
+    poly = PolynomialFeatures(degree=2, include_bias=False)
+    poly_features = poly.fit_transform(df[numeric_cols])
+    
+    # Manual interactions
+    for col1, col2 in combinations(numeric_cols, 2):
+        df[f'{col1}_times_{col2}'] = df[col1] * df[col2]
+        df[f'{col1}_div_{col2}'] = df[col1] / (df[col2] + 1e-8)
+    
+    # Categorical crosses
+    for col1, col2 in combinations(categorical_cols, 2):
+        df[f'{col1}_X_{col2}'] = df[col1].astype(str) + '_' + df[col2].astype(str)
+    
+    return df
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Dimensionality Reduction Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>PCA Components</strong>
+                        <p>Principal components capturing maximum variance</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>t-SNE/UMAP</strong
