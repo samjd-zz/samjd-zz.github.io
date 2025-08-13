@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABT Quick Reference Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 219, 98, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--text);
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .tab-button.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-button.active::before {
+            width: 100%;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 70%;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        h3 {
+            color: var(--dark);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .feature-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'Example';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--light);
+            border-left: 4px solid var(--success);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover {
+            background: white;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .checklist li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .step {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+        }
+
+        .badge.warning {
+            background: var(--warning);
+        }
+
+        .badge.danger {
+            background: var(--danger);
+        }
+
+        .badge.success {
+            background: var(--success);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .tool-category {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .tool-category:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .tool-category h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 0.5rem 0;
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.02);
+        }
+
+        ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .nav-tabs {
+                padding: 0.5rem;
+            }
+            
+            .tab-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Analytical Base Table (ABT)</h1>
+            <p class="subtitle">Complete Reference Guide for Predictive Analytics & Machine Learning</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('design')">Design Principles</button>
+            <button class="tab-button" onclick="showTab('patterns')">Use Cases</button>
+            <button class="tab-button" onclick="showTab('implementation')">Implementation</button>
+            <button class="tab-button" onclick="showTab('advanced')">Advanced</button>
+            <button class="tab-button" onclick="showTab('quality')">Quality & Monitoring</button>
+            <button class="tab-button" onclick="showTab('tools')">Tools</button>
+            <button class="tab-button" onclick="showTab('checklist')">Checklist</button>
+        </nav>
+
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>What is an ABT?</h2>
+                <p>An Analytical Base Table is a denormalized, flat data structure that consolidates all relevant features and target variables into a single table, optimized for machine learning and predictive analytics workflows. Each row represents a unique observation (entity/event), and each column represents a feature or target variable.</p>
+            </div>
+
+            <div class="card">
+                <h2>Core Components</h2>
+                
+                <h3>1. Entity/Grain Definition</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Primary Key</strong>
+                        Unique identifier for each row (customer_id, transaction_id)
+                    </div>
+                    <div class="feature-item">
+                        <strong>Grain Level</strong>
+                        Unit of analysis (customer-level, transaction-level)
+                    </div>
+                    <div class="feature-item">
+                        <strong>Time Component</strong>
+                        Point-in-time snapshot or observation window
+                    </div>
+                </div>
+
+                <h3>2. Target Variable Types</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Binary Classification</strong>
+                        0/1 outcomes (churn, fraud, conversion)
+                    </div>
+                    <div class="feature-item">
+                        <strong>Multi-class</strong>
+                        Multiple categorical outcomes
+                    </div>
+                    <div class="feature-item">
+                        <strong>Regression</strong>
+                        Continuous values (revenue, LTV)
+                    </div>
+                    <div class="feature-item">
+                        <strong>Time-to-Event</strong>
+                        Survival analysis targets
+                    </div>
+                </div>
+
+                <h3>3. Feature Categories</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Demographic</strong>
+                        Age, gender, location, occupation
+                    </div>
+                    <div class="feature-item">
+                        <strong>Behavioral</strong>
+                        Usage patterns, engagement scores
+                    </div>
+                    <div class="feature-item">
+                        <strong>Transactional</strong>
+                        Purchase history, monetary values
+                    </div>
+                    <div class="feature-item">
+                        <strong>Temporal</strong>
+                        Time-based features, seasonality
+                    </div>
+                    <div class="feature-item">
+                        <strong>Derived</strong>
+                        Ratios, aggregations, transformations
+                    </div>
+                    <div class="feature-item">
+                        <strong>External</strong>
+                        Third-party data, economic indicators
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="design" class="content-section">
+            <div class="card">
+                <h2>Temporal Consistency</h2>
+                <div class="metric-card">
+                    <strong>⚠️ Critical Rule:</strong> Features must only use data available before the prediction point
+                </div>
+                
+                <h3>Time Windows</h3>
+                <ul>
+                    <li><strong>Observation Window:</strong> Historical period for feature calculation</li>
+                    <li><strong>Performance Window:</strong> Future period for target variable measurement</li>
+                    <li><strong>Gap Period:</strong> Buffer between observation and performance windows (prevents leakage)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Feature Engineering Best Practices</h2>
+                
+                <h3>Aggregation Strategies</h3>
+                <ul>
+                    <li>Statistical: Count, sum, average, min, max, standard deviation</li>
+                    <li>RFM Metrics: Recency, frequency, monetary values</li>
+                    <li>Rolling Windows: 7-day, 30-day, 90-day aggregates</li>
+                    <li>Lag Features: Previous period values</li>
+                    <li>Trend Indicators: Slope, acceleration, momentum</li>
+                </ul>
+
+                <h3>Data Type Handling</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Numerical</strong>
+                        Scaling, normalization, binning, polynomial features
+                    </div>
+                    <div class="feature-item">
+                        <strong>Categorical</strong>
+                        One-hot encoding, target encoding, embedding
+                    </div>
+                    <div class="feature-item">
+                        <strong>Temporal</strong>
+                        Cyclical encoding (sin/cos for day/month)
+                    </div>
+                    <div class="feature-item">
+                        <strong>Text</strong>
+                        TF-IDF, word embeddings, sentiment scores
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Common Pitfalls to Avoid</h2>
+                <ul class="checklist">
+                    <li><span class="badge danger">Target Leakage</span> Using future information in features</li>
+                    <li><span class="badge danger">Survivorship Bias</span> Only including successful outcomes</li>
+                    <li><span class="badge warning">Sample Selection Bias</span> Non-representative training data</li>
+                    <li><span class="badge warning">Class Imbalance</span> Skewed target distribution</li>
+                    <li><span class="badge">Multicollinearity</span> Highly correlated features</li>
+                    <li><span class="badge">Overfitting</span> Too many features relative to observations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="patterns" class="content-section">
+            <div class="card">
+                <h2>Customer Churn Prediction</h2>
+                <div class="code-block">
+customer_id | tenure | avg_monthly_spend | days_since_last_purchase | support_tickets | ... | churned
+123456      | 24     | 89.50            | 15                      | 2               | ... | 0
+123457      | 6      | 45.20            | 47                      | 5               | ... | 1
+                </div>
+                <ul>
+                    <li><strong>Observation:</strong> 12 months of history</li>
+                    <li><strong>Gap:</strong> 1 month</li>
+                    <li><strong>Target:</strong> Churn in next 3 months</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Fraud Detection</h2>
+                <div class="code-block">
+transaction_id | amount | merchant_category | time_since_last_txn | unusual_location | ... | is_fraud
+TXN789012     | 523.45 | electronics      | 0.5                 | 1                | ... | 1
+TXN789013     | 45.20  | grocery          | 24.3                | 0                | ... | 0
+                </div>
+                <ul>
+                    <li><strong>Observation:</strong> Real-time + historical patterns</li>
+                    <li><strong>Gap:</strong> None (real-time scoring)</li>
+                    <li><strong>Target:</strong> Fraudulent transaction</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Lead Scoring</h2>
+                <div class="code-block">
+lead_id | source   | industry | company_size | engagement_score | days_in_funnel | ... | converted
+L45678  | organic  | tech     | 500         | 78               | 12             | ... | 1
+L45679  | paid_ad  | retail   | 50          | 23               | 45             | ... | 0
+                </div>
+                <ul>
+                    <li><strong>Observation:</strong> All interactions until scoring date</li>
+                    <li><strong>Gap:</strong> None</li>
+                    <li><strong>Target:</strong> Conversion within 30 days</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="implementation" class="content-section">
+            <div class="card">
+                <h2>Implementation Workflow</h2>
+                <div class="workflow-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Data Collection</h4>
+                        <p>Identify sources, define join keys, establish refresh schedules</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Feature Development</h4>
+                        <p>Create specifications, build pipelines, test calculations</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>ABT Assembly</h4>
+                        <p>Execute joins, apply filters, create train/test splits</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Quality Assurance</h4>
+                        <p>Run checks, validate consistency, profile distributions</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Data Quality Validation</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong>Completeness</strong>
+                        Missing value percentages per feature
+                    </div>
+                    <div class="feature-item">
+                        <strong>Consistency</strong>
+                        Data type validation, range checks
+                    </div>
+                    <div class="feature-item">
+                        <strong>Uniqueness</strong>
+                        Primary key duplication check
+                    </div>
+                    <div class="feature-item">
+                        <strong>Timeliness</strong>
+                        Data freshness and update frequency
+                    </div>
+                    <div class="feature-item">
+                        <strong>Accuracy</strong>
+                        Outlier detection, distribution analysis
+                    </div>
+                    <div class="feature-item">
+                        <strong>Validity</strong>
+                        Business rule compliance
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="advanced" class="content-section">
+            <div class="card">
+                <h2>Feature Store Integration</h2>
+                <ul>
+                    <li><strong>Centralized Repository:</strong> Single source of truth for features</li>
+                    <li><strong>Feature Versioning:</strong> Track changes and maintain lineage</li>
+                    <li><strong>Real-time Serving:</strong> Low-latency feature retrieval</li>
+                    <li><strong>Feature Sharing:</strong> Reuse across multiple models</li>
+                    <li><strong>Monitoring:</strong> Track feature quality and drift</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Scalability Considerations</h2>
+                
+                <h3>Partitioning Strategies</h3>
+                <ul>
+                    <li>By date (time-series data)</li>
+                    <li>By entity (customer, product)</li>
+                    <li>By geography (region, country)</li>
+                    <li>Hash partitioning for even distribution</li>
+                </ul>
+
+                <h3>Storage Optimization</h3>
+                <ul>
+                    <li>Columnar formats (Parquet, ORC)</li>
+                    <li>Compression techniques (Snappy, Gzip)</li>
+                    <li>Data type optimization</li>
+                    <li>Archival strategies for old data</li>
+                </ul>
+
+                <h3>Processing Optimization</h3>
+                <ul>
+                    <li>Distributed processing (Spark, Dask)</li>
+                    <li>Incremental updates (Delta processing)</li>
+                    <li>Materialized views for expensive aggregations</li>
+                    <li>Caching strategies for frequent queries</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="quality" class="content-section">
+            <div class="card">
+                <h2>Key Quality Metrics</h2>
+                <div class="metric-card">
+                    <strong>Coverage:</strong> % of population with complete features
+                </div>
+                <div class="metric-card">
+                    <strong>Recency:</strong> Average age of data in features
+                </div>
+                <div class="metric-card">
+                    <strong>Cardinality:</strong> Unique values per categorical feature
+                </div>
+                <div class="metric-card">
+                    <strong>Correlation:</strong> Feature correlation matrix analysis
+                </div>
+                <div class="metric-card">
+                    <strong>Information Value:</strong> Predictive power of features
+                </div>
+                <div class="metric-card">
+                    <strong>VIF:</strong> Variance Inflation Factor for multicollinearity
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Feature Drift Detection</h2>
+                <ul>
+                    <li><strong>Distribution Monitoring:</strong> Track changes in feature distributions</li>
+                    <li><strong>Statistical Tests:</strong> KS test, PSI, Wasserstein distance</li>
+                    <li><strong>Feature Importance:</strong> Monitor changes in predictive power</li>
+                    <li><strong>Performance Alerts:</strong> Trigger on degradation thresholds</li>
+                    <li><strong>Root Cause Analysis:</strong> Identify sources of drift</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Documentation Requirements</h2>
+                <ul class="checklist">
+                    <li>Feature definitions and business logic</li>
+                    <li>Data source dependencies and lineage</li>
+                    <li>Calculation examples with test cases</li>
+                    <li>Update frequency and SLAs</li>
+                    <li>Known limitations and assumptions</li>
+                    <li>Version history and change log</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="tools" class="content-section">
+            <div class="card">
+                <h2>Tools and Technologies</h2>
+                
+                <div class="tools-grid">
+                    <div class="tool-category">
+                        <h4>Data Processing</h4>
+                        <p>SQL, Python (Pandas, PySpark), R (data.table, dplyr), Apache Spark</p>
+                    </div>
+                    <div class="tool-category">
+                        <h4>Feature Stores</h4>
+                        <p>Feast, Tecton, Hopsworks, AWS SageMaker Feature Store</p>
+                    </div>
+                    <div class="tool-category">
+                        <h4>Orchestration</h4>
+                        <p>Airflow, Prefect, Dagster, Luigi</p>
+                    </div>
+                    <div class="tool-category">
+                        <h4>Version Control</h4>
+                        <p>DVC, Git LFS, Delta Lake, MLflow</p>
+                    </div>
+                    <div class="tool-category">
+                        <h4>Monitoring</h4>
+                        <p>Great Expectations, Evidently AI, WhyLabs</p>
+                    </div>
+                    <div class="tool-category">
+                        <h4>Compute</h4>
+                        <p>Databricks, Snowflake, BigQuery, Redshift</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="checklist" class="content-section">
+            <div class="card">
+                <h2>Best Practices Checklist</h2>
+                <ul class="checklist">
+                    <li>Define clear entity and grain</li>
+                    <li>Establish observation and performance windows</li>
+                    <li>Implement data leakage prevention</li>
+                    <li>Document all feature transformations</li>
+                    <li>Create reproducible pipelines</li>
+                    <li>Version control ABT schemas</li>
+                    <li>Implement automated quality checks</li>
+                    <li>Monitor feature drift</li>
+                    <li>Maintain feature documentation</li>
+                    <li>Plan for scalability</li>
+                    <li>Set up incremental update processes</li>
+                    <li>Establish data governance policies</li>
+                    <li>Create feature reusability framework</li>
+                    <li>Define clear SLAs for data freshness</li>
+                    <li>Implement proper error handling</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Quick Start Template</h2>
+                <div class="code-block">
+-- ABT Creation Template
+WITH observation_window AS (
+    SELECT 
+        entity_id,
+        observation_date,
+        -- Define your observation period
+        DATE_SUB(observation_date, INTERVAL 180 DAY) as start_date,
+        observation_date as end_date
+    FROM base_table
+),
+features AS (
+    SELECT 
+        ow.entity_id,
+        ow.observation_date,
+        -- Aggregate features from observation window
+        COUNT(DISTINCT t.transaction_id) as transaction_count,
+        AVG(t.amount) as avg_transaction_amount,
+        MAX(t.transaction_date) as last_transaction_date,
+        -- Add more features here
+    FROM observation_window ow
+    LEFT JOIN transactions t
+        ON ow.entity_id = t.entity_id
+        AND t.transaction_date BETWEEN ow.start_date AND ow.end_date
+    GROUP BY ow.entity_id, ow.observation_date
+),
+target AS (
+    SELECT 
+        entity_id,
+        observation_date,
+        -- Define target in performance window
+        CASE WHEN event_date BETWEEN 
+            DATE_ADD(observation_date, INTERVAL 30 DAY) AND 
+            DATE_ADD(observation_date, INTERVAL 90 DAY)
+        THEN 1 ELSE 0 END as target_flag
+    FROM events
+)
+SELECT 
+    f.*,
+    t.target_flag
+FROM features f
+LEFT JOIN target t
+    ON f.entity_id = t.entity_id
+    AND f.observation_date = t.observation_date;
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
