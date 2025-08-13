@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inductive Bias Brainstorming Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --secondary: #ec4899;
+            --accent: #14b8a6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+            --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #14b8a6 100%);
+            --gradient-dark: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--gradient);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(20, 184, 166, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(1deg); }
+            66% { transform: translate(-20px, 20px) rotate(-1deg); }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--text);
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 20px 0 0 20px;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: var(--primary-dark);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        h4 {
+            color: var(--secondary);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .framework-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .framework-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .framework-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+        }
+
+        .framework-card:hover h4 {
+            color: white;
+        }
+
+        .framework-card:hover ul li {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .framework-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .bias-type {
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .model-specific {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .model-card h5 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .question-list {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .question-list li {
+            margin: 0.8rem 0;
+            color: var(--text);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .question-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 4px solid var(--success);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 1rem;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .checklist li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.2);
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: #d97706;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 1.5rem 0;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--gradient);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid var(--danger);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            padding-left: 3.5rem;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            left: 1.2rem;
+            top: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            padding-left: 3.5rem;
+        }
+
+        .tip-box::before {
+            content: '💡';
+            position: absolute;
+            left: 1.2rem;
+            top: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+        }
+
+        .process-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 1rem; }
+            .framework-grid { grid-template-columns: 1fr; }
+            .process-step:not(:last-child)::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Inductive Bias Brainstorming Framework</h1>
+            <p class="subtitle">Systematic Approach to Discovering Model-Appropriate Biases from Your Data</p>
+        </header>
+
+        <div class="section">
+            <h2>🎯 What Are Inductive Biases?</h2>
+            <p>Inductive biases are the assumptions and constraints we build into our models and features that guide learning toward better generalization. They represent our prior knowledge about the problem structure and help models learn more efficiently from limited data.</p>
+            
+            <div class="tip-box">
+                <strong>Key Insight:</strong> The right inductive biases can dramatically improve model performance by encoding domain knowledge and problem structure directly into the learning process.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Systematic Brainstorming Framework</h2>
+            
+            <div class="process-flow">
+                <div class="process-step">
+                    <span class="step-number">1</span>
+                    <strong>Analyze Domain</strong>
+                </div>
+                <div class="process-step">
+                    <span class="step-number">2</span>
+                    <strong>Explore Data</strong>
+                </div>
+                <div class="process-step">
+                    <span class="step-number">3</span>
+                    <strong>Identify Patterns</strong>
+                </div>
+                <div class="process-step">
+                    <span class="step-number">4</span>
+                    <strong>Match to Model</strong>
+                </div>
+                <div class="process-step">
+                    <span class="step-number">5</span>
+                    <strong>Encode Biases</strong>
+                </div>
+            </div>
+
+            <h3>Step 1: Domain Analysis Questions</h3>
+            <ul class="question-list">
+                <li>What physical laws or constraints govern this domain?</li>
+                <li>Are there conservation principles? (energy, mass, momentum)</li>
+                <li>What symmetries exist? (rotation, translation, permutation)</li>
+                <li>Are there hierarchical relationships in the data?</li>
+                <li>What causal relationships are known?</li>
+                <li>Are there temporal or spatial dependencies?</li>
+                <li>What expert heuristics exist in this field?</li>
+                <li>Are there known invariances we should respect?</li>
+            </ul>
+
+            <h3>Step 2: Data Exploration Checklist</h3>
+            <ul class="checklist">
+                <li>Analyze feature distributions and identify natural groupings</li>
+                <li>Look for periodic patterns or cyclical behavior</li>
+                <li>Identify sparse vs dense regions in feature space</li>
+                <li>Examine correlation structures and dependencies</li>
+                <li>Check for scale invariances or self-similarity</li>
+                <li>Investigate missing data patterns (MAR, MCAR, MNAR)</li>
+                <li>Explore interaction effects between features</li>
+                <li>Identify natural constraints or boundaries</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🧩 Types of Inductive Biases to Consider</h2>
+            
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <h4>Structural Biases</h4>
+                    <ul>
+                        <li><strong>Hierarchy:</strong> Tree structures, nested relationships</li>
+                        <li><strong>Locality:</strong> Nearby points are similar</li>
+                        <li><strong>Compositionality:</strong> Complex patterns from simple parts</li>
+                        <li><strong>Modularity:</strong> Independent sub-components</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-card">
+                    <h4>Invariance Biases</h4>
+                    <ul>
+                        <li><strong>Translation:</strong> Position-independent patterns</li>
+                        <li><strong>Rotation:</strong> Orientation-independent</li>
+                        <li><strong>Scale:</strong> Size-independent relationships</li>
+                        <li><strong>Permutation:</strong> Order-independent sets</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-card">
+                    <h4>Smoothness Biases</h4>
+                    <ul>
+                        <li><strong>Continuity:</strong> Small input changes → small output changes</li>
+                        <li><strong>Lipschitz:</strong> Bounded rate of change</li>
+                        <li><strong>Differentiability:</strong> Smooth decision boundaries</li>
+                        <li><strong>Convexity:</strong> Single global optimum</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-card">
+                    <h4>Sparsity Biases</h4>
+                    <ul>
+                        <li><strong>Feature sparsity:</strong> Few relevant features</li>
+                        <li><strong>Interaction sparsity:</strong> Limited feature interactions</li>
+                        <li><strong>Group sparsity:</strong> Feature groups selected together</li>
+                        <li><strong>Structural sparsity:</strong> Sparse connectivity patterns</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-card">
+                    <h4>Temporal/Sequential Biases</h4>
+                    <ul>
+                        <li><strong>Markov property:</strong> Limited historical dependence</li>
+                        <li><strong>Stationarity:</strong> Time-invariant patterns</li>
+                        <li><strong>Causality:</strong> Past influences future</li>
+                        <li><strong>Periodicity:</strong> Recurring patterns</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-card">
+                    <h4>Geometric Biases</h4>
+                    <ul>
+                        <li><strong>Manifold:</strong> Data lies on lower-dimensional surface</li>
+                        <li><strong>Clustering:</strong> Natural groupings exist</li>
+                        <li><strong>Distance metric:</strong> Specific similarity measures</li>
+                        <li><strong>Topology:</strong> Connectivity patterns matter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤖 Model-Specific Bias Implementation</h2>
+            
+            <h3>Linear Models</h3>
+            <div class="model-specific">
+                <div class="model-card">
+                    <h5>Ridge/Lasso</h5>
+                    <p>• L2/L1 regularization for smoothness/sparsity<br>
+                    • Feature scaling for equal importance<br>
+                    • Polynomial features for non-linearity</p>
+                </div>
+                <div class="model-card">
+                    <h5>Logistic Regression</h5>
+                    <p>• Class weights for imbalance<br>
+                    • Interaction terms for dependencies<br>
+                    • Basis functions for complex boundaries</p>
+                </div>
+            </div>
+
+            <h3>Tree-Based Models</h3>
+            <div class="model-specific">
+                <div class="model-card">
+                    <h5>Random Forest</h5>
+                    <p>• Max depth for simplicity bias<br>
+                    • Min samples split for smoothness<br>
+                    • Feature subsampling for diversity</p>
+                </div>
+                <div class="model-card">
+                    <h5>XGBoost/LightGBM</h5>
+                    <p>• Monotonic constraints<br>
+                    • Interaction constraints<br>
+                    • Custom objective functions</p>
+                </div>
+            </div>
+
+            <h3>Neural Networks</h3>
+            <div class="model-specific">
+                <div class="model-card">
+                    <h5>CNN</h5>
+                    <p>• Convolution for local patterns<br>
+                    • Pooling for translation invariance<br>
+                    • Data augmentation for invariances</p>
+                </div>
+                <div class="model-card">
+                    <h5>RNN/LSTM</h5>
+                    <p>• Recurrence for sequential bias<br>
+                    • Attention for long-range dependencies<br>
+                    • Bidirectional for full context</p>
+                </div>
+                <div class="model-card">
+                    <h5>Transformer</h5>
+                    <p>• Positional encoding for order<br>
+                    • Multi-head attention for aspects<br>
+                    • Layer norm for stability</p>
+                </div>
+                <div class="model-card">
+                    <h5>GNN</h5>
+                    <p>• Message passing for graph structure<br>
+                    • Aggregation for permutation invariance<br>
+                    • Edge features for relationships</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Practical Implementation Strategies</h2>
+            
+            <h3>Feature Engineering for Biases</h3>
+            <div class="code-block">
+# Example: Encoding different types of inductive biases
+
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import PolynomialFeatures
+from scipy.stats import skew
+
+class InductiveBiasEncoder:
+    def __init__(self, df):
+        self.df = df
+        
+    def add_symmetry_features(self):
+        """Add features that respect symmetries"""
+        # Rotation invariance for 2D coordinates
+        if 'x' in self.df and 'y' in self.df:
+            self.df['radius'] = np.sqrt(self.df['x']**2 + self.df['y']**2)
+            self.df['angle'] = np.arctan2(self.df['y'], self.df['x'])
+        
+        # Permutation invariance for sets
+        group_cols = ['item1', 'item2', 'item3']
+        if all(col in self.df for col in group_cols):
+            self.df['mean_items'] = self.df[group_cols].mean(axis=1)
+            self.df['std_items'] = self.df[group_cols].std(axis=1)
+            self.df['max_items'] = self.df[group_cols].max(axis=1)
+    
+    def add_periodicity_features(self):
+        """Encode cyclical patterns"""
+        if 'hour' in self.df:
+            self.df['hour_sin'] = np.sin(2 * np.pi * self.df['hour'] / 24)
+            self.df['hour_cos'] = np.cos(2 * np.pi * self.df['hour'] / 24)
+        
+        if 'day_of_week' in self.df:
+            self.df['dow_sin'] = np.sin(2 * np.pi * self.df['day_of_week'] / 7)
+            self.df['dow_cos'] = np.cos(2 * np.pi * self.df['day_of_week'] / 7)
+    
+    def add_monotonic_features(self):
+        """Create features with known monotonic relationships"""
+        # Cumulative features
+        if 'daily_sales' in self.df:
+            self.df['cumulative_sales'] = self.df['daily_sales'].cumsum()
+            self.df['sales_momentum'] = self.df['daily_sales'].rolling(7).mean()
+        
+        # Rank features for ordinal relationships
+        if 'score' in self.df:
+            self.df['score_rank'] = self.df['score'].rank(pct=True)
+    
+    def add_interaction_constraints(self):
+        """Add constrained interactions based on domain knowledge"""
+        # Physical constraints
+        if 'mass' in self.df and 'acceleration' in self.df:
+            self.df['force'] = self.df['mass'] * self.df['acceleration']
+        
+        # Business logic constraints
+        if 'price' in self.df and 'quantity' in self.df:
+            self.df['revenue'] = self.df['price'] * self.df['quantity']
+            self.df['log_revenue'] = np.log1p(self.df['revenue'])
+            </div>
+
+            <h3>Regularization as Bias</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Regularization Type</th>
+                        <th>Inductive Bias</th>
+                        <th>When to Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>L1 (Lasso)</td>
+                        <td>Sparsity</td>
+                        <td>Many irrelevant features</td>
+                    </tr>
+                    <tr>
+                        <td>L2 (Ridge)</td>
+                        <td>Smoothness</td>
+                        <td>Correlated features</td>
+                    </tr>
+                    <tr>
+                        <td>Elastic Net</td>
+                        <td>Sparsity + Smoothness</td>
+                        <td>Groups of correlated features</td>
+                    </tr>
+                    <tr>
+                        <td>Dropout</td>
+                        <td>Ensemble/Robustness</td>
+                        <td>Prevent overfitting</td>
+                    </tr>
+                    <tr>
+                        <td>Weight Decay</td>
+                        <td>Simplicity</td>
+                        <td>Prefer simple solutions</td>
+                    </tr>
+                    <tr>
+                        <td>Early Stopping</td>
+                        <td>Smoothness</td>
+                        <td>Prevent overfitting</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Domain-Specific Examples</h2>
+            
+            <div class="example-box">
+                <h4>Computer Vision</h4>
+                <ul>
+                    <li><strong>Translation invariance:</strong> Objects can appear anywhere</li>
+                    <li><strong>Scale invariance:</strong> Objects at different distances</li>
+                    <li><strong>Local connectivity:</strong> Pixels form local patterns</li>
+                    <li><strong>Hierarchical features:</strong> Edges → textures → objects</li>
+                </ul>
+                <p><strong>Implementation:</strong> CNN with data augmentation, pyramid pooling</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Time Series Forecasting</h4>
+                <ul>
+                    <li><strong>Temporal dependency:</strong> Recent past matters more</li>
+                    <li><strong>Seasonality:</strong> Periodic patterns repeat</li>
+                    <li><strong>Trend:</strong> Long-term direction</li>
+                    <li><strong>Stationarity:</strong> Statistical properties stable over time</li>
+                </ul>
+                <p><strong>Implementation:</strong> ARIMA components, seasonal decomposition, lag features</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Natural Language Processing</h4>
+                <ul>
+                    <li><strong>Sequential structure:</strong> Word order matters</li>
+                    <li><strong>Compositionality:</strong> Meaning from word combinations</li>
+                    <li><strong>Context dependency:</strong> Words defined by context</li>
+                    <li><strong>Hierarchical structure:</strong> Words → phrases → sentences</li>
+                </ul>
+                <p><strong>Implementation:</strong> Attention mechanisms, positional encoding, subword tokenization</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Recommender Systems</h4>
+                <ul>
+                    <li><strong>Collaborative filtering:</strong> Similar users like similar items</li>
+                    <li><strong>Transitivity:</strong> A→B and B→C implies A→C</li>
+                    <li><strong>Temporal dynamics:</strong> Preferences evolve</li>
+                    <li><strong>Cold start:</strong> New items/users need special handling</li>
+                </ul>
+                <p><strong>Implementation:</strong> Matrix factorization, embedding layers, time-decay weights</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✅ Validation and Testing</h2>
+            
+            <h3>How to Validate Your Biases</h3>
+            <ul class="checklist">
+                <li>Ablation studies: Remove biases one at a time</li>
+                <li>Synthetic data: Test on data where true bias is known</li>
+                <li>Transfer learning: Check if biases generalize to related tasks</li>
+                <li>Interpretability analysis: Verify model uses expected patterns</li>
+                <li>Robustness testing: Ensure biases don't overconstraint</li>
+                <li>Cross-validation: Test bias effectiveness across data splits</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>Common Pitfalls:</strong>
+                <ul>
+                    <li>Over-constraining: Too many biases can prevent learning</li>
+                    <li>Wrong assumptions: Incorrect biases hurt more than help</li>
+                    <li>Data leakage: Encoding future information as bias</li>
+                    <li>Overfitting to training domain: Biases too specific</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Practical Workflow</h2>
+            
+            <h3>Step-by-Step Process</h3>
+            <ol style="line-height: 2;">
+                <li><span class="step-number">1</span> <strong>Profile your dataset:</strong> Statistical analysis, visualizations, correlation matrices</li>
+                <li><span class="step-number">2</span> <strong>Interview domain experts:</strong> Understand physical/business constraints</li>
+                <li><span class="step-number">3</span> <strong>List candidate biases:</strong> Based on data patterns and domain knowledge</li>
+                <li><span class="step-number">4</span> <strong>Prioritize by expected impact:</strong> Start with strongest/most certain biases</li>
+                <li><span class="step-number">5</span> <strong>Implement incrementally:</strong> Add one bias at a time</li>
+                <li><span class="step-number">6</span> <strong>Measure impact:</strong> A/B testing, ablation studies</li>
+                <li><span class="step-number">7</span> <strong>Iterate and refine:</strong> Adjust strength, combine biases</li>
+            </ol>
+
+            <div class="tip-box">
+                <strong>Pro Tips:</strong>
+                <ul>
+                    <li>Start with weak biases and gradually strengthen them</li>
+                    <li>Combine multiple complementary biases for best results</li>
+                    <li>Document assumptions clearly for future reference</li>
+                    <li>Consider computational cost vs benefit trade-offs</li>
+                    <li>Keep some data completely held out to test final biases</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Quick Reference Checklist</h2>
+            
+            <h3>Questions to Ask About Your Dataset</h3>
+            <ul class="question-list">
+                <li>What would a domain expert immediately notice about this data?</li>
+                <li>Are there natural groupings or hierarchies?</li>
+                <li>What transformations leave the problem unchanged?</li>
+                <li>What constraints must any valid solution satisfy?</li>
+                <li>How does noise typically manifest in this domain?</li>
+                <li>What patterns appear at different scales?</li>
+                <li>Are there known relationships between features?</li>
+                <li>What makes two instances similar in this domain?</li>
+                <li>How does the data change over time?</li>
+                <li>What rare events or edge cases exist?</li>
+            </ul>
+
+            <h3>Bias-Model Compatibility Matrix</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bias Type</th>
+                        <th>Best Models</th>
+                        <th>Implementation Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sparsity</td>
+                        <td>Linear, Trees</td>
+                        <td>L1 regularization, Feature selection</td>
+                    </tr>
+                    <tr>
+                        <td>Locality</td>
+                        <td>CNN, KNN</td>
+                        <td>Convolutions, Distance metrics</td>
+                    </tr>
+                    <tr>
+                        <td>Hierarchy</td>
+                        <td>Trees, Deep NN</td>
+                        <td>Nested features, Layer structure</td>
+                    </tr>
+                    <tr>
+                        <td>Invariance</td>
+                        <td>CNN, GNN</td>
+                        <td>Data augmentation, Architecture</td>
+                    </tr>
+                    <tr>
+                        <td>Smoothness</td>
+                        <td>SVM, NN</td>
+                        <td>RBF kernels, Weight decay</td>
+                    </tr>
+                    <tr>
+                        <td>Periodicity</td>
+                        <td>Fourier, RNN</td>
+                        <td>Frequency features, Seasonal models</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
