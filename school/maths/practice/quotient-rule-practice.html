@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotient Rule Practice</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #764ba2;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .formula-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0 30px 0;
+            text-align: center;
+            font-size: 1.2em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .formula-box:hover {
+            transform: translateY(-5px);
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .problem {
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .problem:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateX(5px);
+        }
+        .problem-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fd;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .solution.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .control-panel {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        .tips {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #ffc107;
+            margin: 30px 0;
+        }
+        .tips h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .tips ul {
+            color: #856404;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📐 Quotient Rule Practice Problems</h1>
+        
+        <div class="formula-box">
+            <strong>Quotient Rule Formula:</strong><br>
+            $$\frac{d}{dx}\left[\frac{f(x)}{g(x)}\right] = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2}$$
+            <em>When: Derivative of one function divided by another</em>
+        </div>
+
+        <div class="control-panel">
+            <button onclick="showAll()">Show All Solutions</button>
+            <button onclick="hideAll()">Hide All Solutions</button>
+        </div>
+
+        <div class="section">
+            <h2>🌟 Basic Level</h2>
+            
+            <div class="problem">
+                <span class="problem-number">1</span>
+                Find the derivative of $$f(x) = \frac{x^2}{x+1}$$
+                <button onclick="toggleSolution('sol1')">Toggle Solution</button>
+                <div id="sol1" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = x^2\) and \(g(x) = x+1\)<br>
+                    Then \(f'(x) = 2x\) and \(g'(x) = 1\)<br><br>
+                    $$f'(x) = \frac{2x(x+1) - x^2(1)}{(x+1)^2} = \frac{2x^2 + 2x - x^2}{(x+1)^2} = \frac{x^2 + 2x}{(x+1)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">2</span>
+                Find the derivative of $$y = \frac{2x+3}{x-1}$$
+                <button onclick="toggleSolution('sol2')">Toggle Solution</button>
+                <div id="sol2" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = 2x+3\) and \(g(x) = x-1\)<br>
+                    Then \(f'(x) = 2\) and \(g'(x) = 1\)<br><br>
+                    $$y' = \frac{2(x-1) - (2x+3)(1)}{(x-1)^2} = \frac{2x - 2 - 2x - 3}{(x-1)^2} = \frac{-5}{(x-1)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">3</span>
+                Find the derivative of $$h(x) = \frac{x^3}{x^2+1}$$
+                <button onclick="toggleSolution('sol3')">Toggle Solution</button>
+                <div id="sol3" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = x^3\) and \(g(x) = x^2+1\)<br>
+                    Then \(f'(x) = 3x^2\) and \(g'(x) = 2x\)<br><br>
+                    $$h'(x) = \frac{3x^2(x^2+1) - x^3(2x)}{(x^2+1)^2} = \frac{3x^4 + 3x^2 - 2x^4}{(x^2+1)^2} = \frac{x^4 + 3x^2}{(x^2+1)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">4</span>
+                Find the derivative of $$g(x) = \frac{5x}{x^2+4}$$
+                <button onclick="toggleSolution('sol4')">Toggle Solution</button>
+                <div id="sol4" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = 5x\) and \(g(x) = x^2+4\)<br>
+                    Then \(f'(x) = 5\) and \(g'(x) = 2x\)<br><br>
+                    $$g'(x) = \frac{5(x^2+4) - 5x(2x)}{(x^2+4)^2} = \frac{5x^2 + 20 - 10x^2}{(x^2+4)^2} = \frac{20 - 5x^2}{(x^2+4)^2}$$
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Intermediate Level</h2>
+            
+            <div class="problem">
+                <span class="problem-number">5</span>
+                Find the derivative of $$f(x) = \frac{x^2-3x+2}{x^2+2x}$$
+                <button onclick="toggleSolution('sol5')">Toggle Solution</button>
+                <div id="sol5" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = x^2-3x+2\) and \(g(x) = x^2+2x\)<br>
+                    Then \(f'(x) = 2x-3\) and \(g'(x) = 2x+2\)<br><br>
+                    
+                    Apply the quotient rule:<br>
+                    $$f'(x) = \frac{(2x-3)(x^2+2x) - (x^2-3x+2)(2x+2)}{(x^2+2x)^2}$$
+                    
+                    Expand \((2x-3)(x^2+2x)\):<br>
+                    $$= 2x^3 + 4x^2 - 3x^2 - 6x = 2x^3 + x^2 - 6x$$
+                    
+                    Expand \((x^2-3x+2)(2x+2)\):<br>
+                    $$= 2x^3 + 2x^2 - 6x^2 - 6x + 4x + 4 = 2x^3 - 4x^2 - 2x + 4$$
+                    
+                    Subtract:<br>
+                    $$= \frac{(2x^3 + x^2 - 6x) - (2x^3 - 4x^2 - 2x + 4)}{(x^2+2x)^2}$$
+                    $$= \frac{2x^3 + x^2 - 6x - 2x^3 + 4x^2 + 2x - 4}{(x^2+2x)^2}$$
+                    $$= \frac{5x^2 - 4x - 4}{(x^2+2x)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">6</span>
+                Find the derivative of $$y = \frac{\sin x}{x}$$
+                <button onclick="toggleSolution('sol6')">Toggle Solution</button>
+                <div id="sol6" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = \sin x\) and \(g(x) = x\)<br>
+                    Then \(f'(x) = \cos x\) and \(g'(x) = 1\)<br><br>
+                    $$y' = \frac{\cos x \cdot x - \sin x \cdot 1}{x^2} = \frac{x\cos x - \sin x}{x^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">7</span>
+                Find the derivative of $$p(x) = \frac{e^x}{x^2+1}$$
+                <button onclick="toggleSolution('sol7')">Toggle Solution</button>
+                <div id="sol7" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = e^x\) and \(g(x) = x^2+1\)<br>
+                    Then \(f'(x) = e^x\) and \(g'(x) = 2x\)<br><br>
+                    $$p'(x) = \frac{e^x(x^2+1) - e^x(2x)}{(x^2+1)^2} = \frac{e^x(x^2+1-2x)}{(x^2+1)^2} = \frac{e^x(x^2-2x+1)}{(x^2+1)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">8</span>
+                Find the derivative of $$q(x) = \frac{x^2+1}{e^x}$$
+                <button onclick="toggleSolution('sol8')">Toggle Solution</button>
+                <div id="sol8" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = x^2+1\) and \(g(x) = e^x\)<br>
+                    Then \(f'(x) = 2x\) and \(g'(x) = e^x\)<br><br>
+                    $$q'(x) = \frac{2x \cdot e^x - (x^2+1) \cdot e^x}{(e^x)^2} = \frac{e^x(2x - x^2 - 1)}{e^{2x}} = \frac{2x - x^2 - 1}{e^x}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">9</span>
+                Find the derivative of $$r(x) = \frac{\ln x}{x^2}$$
+                <button onclick="toggleSolution('sol9')">Toggle Solution</button>
+                <div id="sol9" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = \ln x\) and \(g(x) = x^2\)<br>
+                    Then \(f'(x) = \frac{1}{x}\) and \(g'(x) = 2x\)<br><br>
+                    $$r'(x) = \frac{\frac{1}{x} \cdot x^2 - \ln x \cdot 2x}{x^4} = \frac{x - 2x\ln x}{x^4} = \frac{1 - 2\ln x}{x^3}$$
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Advanced Level</h2>
+            
+            <div class="problem">
+                <span class="problem-number">10</span>
+                Find the derivative of $$f(x) = \frac{x\cos x}{1+\sin x}$$
+                <button onclick="toggleSolution('sol10')">Toggle Solution</button>
+                <div id="sol10" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = x\cos x\) and \(g(x) = 1+\sin x\)<br>
+                    Using product rule: \(f'(x) = \cos x - x\sin x\)<br>
+                    And \(g'(x) = \cos x\)<br><br>
+                    $$f'(x) = \frac{(\cos x - x\sin x)(1+\sin x) - x\cos x \cdot \cos x}{(1+\sin x)^2}$$
+                    $$= \frac{\cos x + \cos x\sin x - x\sin x - x\sin^2 x - x\cos^2 x}{(1+\sin x)^2}$$
+                    $$= \frac{\cos x + \cos x\sin x - x\sin x - x}{(1+\sin x)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">11</span>
+                Find the derivative of $$g(x) = \frac{x^3-2x}{(x+1)^2}$$
+                <button onclick="toggleSolution('sol11')">Toggle Solution</button>
+                <div id="sol11" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = x^3-2x\) and \(g(x) = (x+1)^2 = x^2+2x+1\)<br>
+                    Then \(f'(x) = 3x^2-2\) and \(g'(x) = 2x+2 = 2(x+1)\)<br><br>
+                    $$g'(x) = \frac{(3x^2-2)(x+1)^2 - (x^3-2x) \cdot 2(x+1)}{(x+1)^4}$$
+                    $$= \frac{(x+1)[(3x^2-2)(x+1) - 2(x^3-2x)]}{(x+1)^4}$$
+                    $$= \frac{3x^3 + 3x^2 - 2x - 2 - 2x^3 + 4x}{(x+1)^3} = \frac{x^3 + 3x^2 + 2x - 2}{(x+1)^3}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">12</span>
+                Find the derivative of $$h(x) = \frac{\tan x}{1+x^2}$$
+                <button onclick="toggleSolution('sol12')">Toggle Solution</button>
+                <div id="sol12" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = \tan x\) and \(g(x) = 1+x^2\)<br>
+                    Then \(f'(x) = \sec^2 x\) and \(g'(x) = 2x\)<br><br>
+                    $$h'(x) = \frac{\sec^2 x(1+x^2) - \tan x \cdot 2x}{(1+x^2)^2} = \frac{\sec^2 x(1+x^2) - 2x\tan x}{(1+x^2)^2}$$
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">13</span>
+                Find the derivative of $$k(x) = \frac{e^{2x}}{x^2+x+1}$$
+                <button onclick="toggleSolution('sol13')">Toggle Solution</button>
+                <div id="sol13" class="solution">
+                    <strong>Solution:</strong><br>
+                    Let \(f(x) = e^{2x}\) and \(g(x) = x^2+x+1\)<br>
+                    Then \(f'(x) = 2e^{2x}\) and \(g'(x) = 2x+1\)<br><br>
+                    $$k'(x) = \frac{2e^{2x}(x^2+x+1) - e^{2x}(2x+1)}{(x^2+x+1)^2}$$
+                    $$= \frac{e^{2x}[2(x^2+x+1) - (2x+1)]}{(x^2+x+1)^2}$$
+                    $$= \frac{e^{2x}(2x^2+2x+2-2x-1)}{(x^2+x+1)^2} = \frac{e^{2x}(2x^2+1)}{(x^2+x+1)^2}$$
+                </div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <h3>💡 Tips for Success:</h3>
+            <ul>
+                <li>Always identify f(x) (numerator) and g(x) (denominator) first</li>
+                <li>Find f'(x) and g'(x) separately before applying the formula</li>
+                <li>Don't forget to square the denominator: [g(x)]²</li>
+                <li>Watch your signs! The minus sign in the numerator is crucial</li>
+                <li>Simplify your final answer when possible</li>
+                <li>For complex functions, use the chain rule or product rule as needed within f'(x) or g'(x)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            }
+        });
+
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.classList.toggle('show');
+        }
+
+        function showAll() {
+            const solutions = document.querySelectorAll('.solution');
+            solutions.forEach(sol => sol.classList.add('show'));
+        }
+
+        function hideAll() {
+            const solutions = document.querySelectorAll('.solution');
+            solutions.forEach(sol => sol.classList.remove('show'));
+        }
+    </script>
+</body>
+</html>

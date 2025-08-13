@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivative by Limit Definition Practice</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #764ba2;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .formula-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0 30px 0;
+            text-align: center;
+            font-size: 1.2em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .formula-box:hover {
+            transform: translateY(-5px);
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .problem {
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .problem:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateX(5px);
+        }
+        .problem-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .solution {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fd;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .solution.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .control-panel {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        .tips {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #ffc107;
+            margin: 30px 0;
+        }
+        .tips h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .tips ul {
+            color: #856404;
+            line-height: 1.8;
+        }
+        .process-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #4169e1;
+        }
+        .process-box h4 {
+            color: #4169e1;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Derivative by Limit Definition Practice</h1>
+        
+        <div class="formula-box">
+            <strong>Limit Definition of Derivative:</strong><br>
+            $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+            <em>When: Proving derivative rules or finding rate of change from first principles</em>
+        </div>
+
+        <div class="process-box">
+            <h4>📝 General Process:</h4>
+            <strong>Step 1:</strong> Find f(x+h) by substituting (x+h) into the function<br>
+            <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+            <strong>Step 3:</strong> Divide by h<br>
+            <strong>Step 4:</strong> Simplify the expression<br>
+            <strong>Step 5:</strong> Take the limit as h → 0
+        </div>
+
+        <div class="control-panel">
+            <button onclick="showAll()">Show All Solutions</button>
+            <button onclick="hideAll()">Hide All Solutions</button>
+        </div>
+
+        <div class="section">
+            <h2>🌟 Basic Level - Linear and Quadratic Functions</h2>
+            
+            <div class="problem">
+                <span class="problem-number">1</span>
+                Find the derivative of $$f(x) = 3x$$ using the limit definition
+                <button onclick="toggleSolution('sol1')">Toggle Solution</button>
+                <div id="sol1" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = 3(x+h) = 3x + 3h$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (3x + 3h) - 3x = 3h$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{3h}{h} = 3$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} 3 = 3$$
+                    
+                    <strong>Answer:</strong> f'(x) = 3
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">2</span>
+                Find the derivative of $$f(x) = x^2$$ using the limit definition
+                <button onclick="toggleSolution('sol2')">Toggle Solution</button>
+                <div id="sol2" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = (x+h)^2 = x^2 + 2xh + h^2$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (x^2 + 2xh + h^2) - x^2 = 2xh + h^2$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{2xh + h^2}{h} = \frac{h(2x + h)}{h} = 2x + h$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} (2x + h) = 2x + 0 = 2x$$
+                    
+                    <strong>Answer:</strong> f'(x) = 2x
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">3</span>
+                Find the derivative of $$f(x) = 5$$ using the limit definition
+                <button onclick="toggleSolution('sol3')">Toggle Solution</button>
+                <div id="sol3" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = 5$$ (constant function)
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = 5 - 5 = 0$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{0}{h} = 0$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} 0 = 0$$
+                    
+                    <strong>Answer:</strong> f'(x) = 0<br>
+                    <em>The derivative of any constant is 0!</em>
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">4</span>
+                Find the derivative of $$f(x) = 2x + 7$$ using the limit definition
+                <button onclick="toggleSolution('sol4')">Toggle Solution</button>
+                <div id="sol4" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = 2(x+h) + 7 = 2x + 2h + 7$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (2x + 2h + 7) - (2x + 7) = 2h$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{2h}{h} = 2$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} 2 = 2$$
+                    
+                    <strong>Answer:</strong> f'(x) = 2
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Intermediate Level - Higher Powers and Fractions</h2>
+            
+            <div class="problem">
+                <span class="problem-number">5</span>
+                Find the derivative of $$f(x) = x^3$$ using the limit definition
+                <button onclick="toggleSolution('sol5')">Toggle Solution</button>
+                <div id="sol5" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = (x+h)^3 = x^3 + 3x^2h + 3xh^2 + h^3$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (x^3 + 3x^2h + 3xh^2 + h^3) - x^3$$
+                    $$= 3x^2h + 3xh^2 + h^3$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{3x^2h + 3xh^2 + h^3}{h}$$
+                    $$= \frac{h(3x^2 + 3xh + h^2)}{h} = 3x^2 + 3xh + h^2$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} (3x^2 + 3xh + h^2) = 3x^2 + 0 + 0 = 3x^2$$
+                    
+                    <strong>Answer:</strong> f'(x) = 3x²
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">6</span>
+                Find the derivative of $$f(x) = \frac{1}{x}$$ using the limit definition
+                <button onclick="toggleSolution('sol6')">Toggle Solution</button>
+                <div id="sol6" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = \frac{1}{x+h}$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = \frac{1}{x+h} - \frac{1}{x}$$
+                    
+                    Find common denominator:<br>
+                    $$= \frac{x - (x+h)}{x(x+h)} = \frac{x - x - h}{x(x+h)} = \frac{-h}{x(x+h)}$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{-h}{x(x+h)} \cdot \frac{1}{h} = \frac{-1}{x(x+h)}$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} \frac{-1}{x(x+h)} = \frac{-1}{x \cdot x} = -\frac{1}{x^2}$$
+                    
+                    <strong>Answer:</strong> f'(x) = -1/x²
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">7</span>
+                Find the derivative of $$f(x) = x^2 - 3x$$ using the limit definition
+                <button onclick="toggleSolution('sol7')">Toggle Solution</button>
+                <div id="sol7" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = (x+h)^2 - 3(x+h)$$
+                    $$= x^2 + 2xh + h^2 - 3x - 3h$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (x^2 + 2xh + h^2 - 3x - 3h) - (x^2 - 3x)$$
+                    $$= 2xh + h^2 - 3h$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{2xh + h^2 - 3h}{h}$$
+                    $$= \frac{h(2x + h - 3)}{h} = 2x + h - 3$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} (2x + h - 3) = 2x - 3$$
+                    
+                    <strong>Answer:</strong> f'(x) = 2x - 3
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">8</span>
+                Find the derivative of $$f(x) = \sqrt{x}$$ using the limit definition
+                <button onclick="toggleSolution('sol8')">Toggle Solution</button>
+                <div id="sol8" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = \sqrt{x+h}$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = \sqrt{x+h} - \sqrt{x}$$
+                    
+                    <strong>Rationalize:</strong> Multiply by conjugate<br>
+                    $$= \frac{(\sqrt{x+h} - \sqrt{x})(\sqrt{x+h} + \sqrt{x})}{\sqrt{x+h} + \sqrt{x}}$$
+                    $$= \frac{(x+h) - x}{\sqrt{x+h} + \sqrt{x}} = \frac{h}{\sqrt{x+h} + \sqrt{x}}$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{h}{\sqrt{x+h} + \sqrt{x}} \cdot \frac{1}{h} = \frac{1}{\sqrt{x+h} + \sqrt{x}}$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} \frac{1}{\sqrt{x+h} + \sqrt{x}} = \frac{1}{\sqrt{x} + \sqrt{x}} = \frac{1}{2\sqrt{x}}$$
+                    
+                    <strong>Answer:</strong> f'(x) = 1/(2√x)
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Advanced Level - Complex Functions</h2>
+            
+            <div class="problem">
+                <span class="problem-number">9</span>
+                Find the derivative of $$f(x) = \frac{1}{x^2}$$ using the limit definition
+                <button onclick="toggleSolution('sol9')">Toggle Solution</button>
+                <div id="sol9" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = \frac{1}{(x+h)^2}$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = \frac{1}{(x+h)^2} - \frac{1}{x^2}$$
+                    
+                    Find common denominator:<br>
+                    $$= \frac{x^2 - (x+h)^2}{x^2(x+h)^2} = \frac{x^2 - (x^2 + 2xh + h^2)}{x^2(x+h)^2}$$
+                    $$= \frac{-2xh - h^2}{x^2(x+h)^2}$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{-2xh - h^2}{x^2(x+h)^2} \cdot \frac{1}{h}$$
+                    $$= \frac{h(-2x - h)}{hx^2(x+h)^2} = \frac{-2x - h}{x^2(x+h)^2}$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} \frac{-2x - h}{x^2(x+h)^2} = \frac{-2x}{x^2 \cdot x^2} = \frac{-2x}{x^4} = -\frac{2}{x^3}$$
+                    
+                    <strong>Answer:</strong> f'(x) = -2/x³
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">10</span>
+                Find the derivative of $$f(x) = 2x^2 + 5x - 1$$ using the limit definition
+                <button onclick="toggleSolution('sol10')">Toggle Solution</button>
+                <div id="sol10" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = 2(x+h)^2 + 5(x+h) - 1$$
+                    $$= 2(x^2 + 2xh + h^2) + 5x + 5h - 1$$
+                    $$= 2x^2 + 4xh + 2h^2 + 5x + 5h - 1$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (2x^2 + 4xh + 2h^2 + 5x + 5h - 1) - (2x^2 + 5x - 1)$$
+                    $$= 4xh + 2h^2 + 5h$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{4xh + 2h^2 + 5h}{h}$$
+                    $$= \frac{h(4x + 2h + 5)}{h} = 4x + 2h + 5$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} (4x + 2h + 5) = 4x + 5$$
+                    
+                    <strong>Answer:</strong> f'(x) = 4x + 5
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">11</span>
+                Find the derivative of $$f(x) = x^4$$ using the limit definition
+                <button onclick="toggleSolution('sol11')">Toggle Solution</button>
+                <div id="sol11" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h) using binomial expansion<br>
+                    $$f(x+h) = (x+h)^4 = x^4 + 4x^3h + 6x^2h^2 + 4xh^3 + h^4$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = (x^4 + 4x^3h + 6x^2h^2 + 4xh^3 + h^4) - x^4$$
+                    $$= 4x^3h + 6x^2h^2 + 4xh^3 + h^4$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{4x^3h + 6x^2h^2 + 4xh^3 + h^4}{h}$$
+                    $$= \frac{h(4x^3 + 6x^2h + 4xh^2 + h^3)}{h}$$
+                    $$= 4x^3 + 6x^2h + 4xh^2 + h^3$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} (4x^3 + 6x^2h + 4xh^2 + h^3) = 4x^3$$
+                    
+                    <strong>Answer:</strong> f'(x) = 4x³
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">12</span>
+                Find the derivative of $$f(x) = \frac{2x}{x+1}$$ using the limit definition
+                <button onclick="toggleSolution('sol12')">Toggle Solution</button>
+                <div id="sol12" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    <strong>Step 1:</strong> Find f(x+h)<br>
+                    $$f(x+h) = \frac{2(x+h)}{(x+h)+1} = \frac{2x+2h}{x+h+1}$$
+                    
+                    <strong>Step 2:</strong> Calculate f(x+h) - f(x)<br>
+                    $$f(x+h) - f(x) = \frac{2x+2h}{x+h+1} - \frac{2x}{x+1}$$
+                    
+                    Find common denominator:<br>
+                    $$= \frac{(2x+2h)(x+1) - 2x(x+h+1)}{(x+h+1)(x+1)}$$
+                    $$= \frac{2x^2 + 2x + 2xh + 2h - 2x^2 - 2xh - 2x}{(x+h+1)(x+1)}$$
+                    $$= \frac{2h}{(x+h+1)(x+1)}$$
+                    
+                    <strong>Step 3:</strong> Divide by h<br>
+                    $$\frac{f(x+h) - f(x)}{h} = \frac{2h}{(x+h+1)(x+1)} \cdot \frac{1}{h} = \frac{2}{(x+h+1)(x+1)}$$
+                    
+                    <strong>Step 4:</strong> Take the limit<br>
+                    $$f'(x) = \lim_{h \to 0} \frac{2}{(x+h+1)(x+1)} = \frac{2}{(x+1)(x+1)} = \frac{2}{(x+1)^2}$$
+                    
+                    <strong>Answer:</strong> f'(x) = 2/(x+1)²
+                </div>
+            </div>
+
+            <div class="problem">
+                <span class="problem-number">13</span>
+                Prove that the derivative of $$f(x) = x^n$$ is $$nx^{n-1}$$ using the limit definition (general case)
+                <button onclick="toggleSolution('sol13')">Toggle Solution</button>
+                <div id="sol13" class="solution">
+                    <strong>Solution:</strong><br><br>
+                    We need to prove: If f(x) = x^n, then f'(x) = nx^(n-1)<br><br>
+                    
+                    <strong>Step 1:</strong> Set up the limit definition<br>
+                    $$f'(x) = \lim_{h \to 0} \frac{(x+h)^n - x^n}{h}$$
+                    
+                    <strong>Step 2:</strong> Use the binomial theorem<br>
+                    $$(x+h)^n = x^n + nx^{n-1}h + \binom{n}{2}x^{n-2}h^2 + ... + h^n$$
+                    
+                    <strong>Step 3:</strong> Substitute into the limit<br>
+                    $$f'(x) = \lim_{h \to 0} \frac{x^n + nx^{n-1}h + \binom{n}{2}x^{n-2}h^2 + ... + h^n - x^n}{h}$$
+                    
+                    <strong>Step 4:</strong> Simplify<br>
+                    $$= \lim_{h \to 0} \frac{nx^{n-1}h + \binom{n}{2}x^{n-2}h^2 + ... + h^n}{h}$$
+                    $$= \lim_{h \to 0} \frac{h(nx^{n-1} + \binom{n}{2}x^{n-2}h + ... + h^{n-1})}{h}$$
+                    $$= \lim_{h \to 0} (nx^{n-1} + \binom{n}{2}x^{n-2}h + ... + h^{n-1})$$
+                    
+                    <strong>Step 5:</strong> Take the limit<br>
+                    As h → 0, all terms with h vanish:<br>
+                    $$f'(x) = nx^{n-1} + 0 + 0 + ... + 0 = nx^{n-1}$$
+                    
+                    <strong>Therefore:</strong> The power rule is proven! $$\frac{d}{dx}[x^n] = nx^{n-1}$$
+                </div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <h3>💡 Tips for Success:</h3>
+            <ul>
+                <li><strong>Always follow the 5-step process:</strong> f(x+h), subtract f(x), divide by h, simplify, take limit</li>
+                <li><strong>Expand carefully:</strong> Use FOIL for (x+h)², and the binomial theorem for higher powers</li>
+                <li><strong>Factor out h:</strong> Before taking the limit, always factor h from the numerator to cancel with the h in the denominator</li>
+                <li><strong>For fractions:</strong> Find a common denominator before subtracting</li>
+                <li><strong>For square roots:</strong> Multiply by the conjugate to rationalize</li>
+                <li><strong>Check your algebra:</strong> Most errors come from arithmetic mistakes, not conceptual misunderstanding</li>
+                <li><strong>The limit removes h:</strong> After simplifying, substitute h = 0 to get the final answer</li>
+                <li><strong>Practice recognition:</strong> The result should match what you'd get using derivative rules!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            }
+        });
+
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.classList.toggle('show');
+        }
+
+        function showAll() {
+            const solutions = document.querySelectorAll('.solution');
+            solutions.forEach(sol => sol.classList.add('show'));
+        }
+
+        function hideAll() {
+            const solutions = document.querySelectorAll('.solution');
+            solutions.forEach(sol => sol.classList.remove('show'));
+        }
+    </script>
+</body>
+</html>
