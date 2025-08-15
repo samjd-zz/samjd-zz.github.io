@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-TDD & Advanced Java Tutoring - Bulletin Board Flyer</title>
     <style>
+        @page {
+            size: 8.5in 11in;
+            margin: 0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,286 +19,246 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
         }
 
         .flyer {
             width: 8.5in;
             height: 11in;
             background: white;
-            border: 2px solid #000;
             position: relative;
             display: flex;
             flex-direction: column;
-            page-break-after: always;
+            margin: 0 auto;
         }
 
         .main-content {
+            padding: 0.25in 0.25in 0 0.25in;
             flex: 1;
-            padding: 0.4in 0.5in;
             display: flex;
             flex-direction: column;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 0.3in;
-            border-bottom: 5px solid #000;
-            padding-bottom: 0.2in;
+            border: 5px solid #000;
+            padding: 0.15in;
+            margin-bottom: 0.15in;
         }
 
-        .headline {
-            font-size: 48pt;
+        .headline-top {
+            font-size: 52pt;
             font-weight: 900;
-            line-height: 1;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: -2px;
+            line-height: 0.9;
+            letter-spacing: -3px;
         }
 
-        .headline-ai {
-            color: #000;
-        }
-
-        .headline-tdd {
-            color: #000;
-            background: linear-gradient(45deg, #000 0%, #333 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: inline-block;
+        .headline-bottom {
+            font-size: 42pt;
+            font-weight: 900;
+            line-height: 0.9;
+            margin-top: 5px;
         }
 
         .subheadline {
-            font-size: 18pt;
-            font-weight: bold;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .revolution-box {
-            background: #000;
-            color: white;
-            padding: 15px;
-            margin: 0.2in 0;
-            text-align: center;
             font-size: 14pt;
             font-weight: bold;
-            position: relative;
-            transform: rotate(-1deg);
+            margin-top: 8px;
+            letter-spacing: 1px;
         }
 
-        .revolution-box::before,
-        .revolution-box::after {
-            content: "★";
-            position: absolute;
-            font-size: 24pt;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .revolution-box::before {
-            left: 20px;
-        }
-
-        .revolution-box::after {
-            right: 20px;
-        }
-
-        .key-points {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.2in;
-            margin: 0.2in 0;
-        }
-
-        .point-box {
-            border: 3px solid #000;
-            padding: 15px;
-            background: #f0f0f0;
-        }
-
-        .point-title {
-            font-size: 16pt;
-            font-weight: bold;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .point-content {
-            font-size: 11pt;
-            line-height: 1.3;
-        }
-
-        .instructor-box {
+        .impact-box {
             background: #000;
             color: white;
-            padding: 20px;
-            margin: 0.2in 0;
+            padding: 0.1in;
+            text-align: center;
+            font-size: 13pt;
+            font-weight: bold;
+            margin-bottom: 0.15in;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.15in;
+            margin-bottom: 0.15in;
+        }
+
+        .info-box {
+            border: 3px solid #000;
+            padding: 0.1in;
+        }
+
+        .info-title {
+            font-size: 14pt;
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-align: center;
+            background: #000;
+            color: white;
+            padding: 3px;
+        }
+
+        .info-content {
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+
+        .info-content li {
+            margin-left: 15px;
+            margin-bottom: 2px;
+        }
+
+        .instructor-section {
+            border: 3px solid #000;
+            margin-bottom: 0.15in;
+            padding: 0.1in;
             text-align: center;
         }
 
         .instructor-name {
-            font-size: 20pt;
-            font-weight: bold;
+            font-size: 18pt;
+            font-weight: 900;
+            background: #000;
+            color: white;
+            padding: 5px;
             margin-bottom: 5px;
         }
 
         .credentials {
+            font-size: 10pt;
+            line-height: 1.3;
+        }
+
+        .benefits-section {
+            margin-bottom: 0.15in;
+        }
+
+        .benefit-item {
             font-size: 11pt;
-            line-height: 1.4;
+            padding: 3px 0;
+            padding-left: 20px;
+            position: relative;
+            font-weight: bold;
         }
 
-        .pricing-strip {
-            background: repeating-linear-gradient(
-                45deg,
-                #000,
-                #000 10px,
-                #333 10px,
-                #333 20px
-            );
-            color: white;
-            padding: 15px;
-            text-align: center;
-            margin: 0.2in 0;
+        .benefit-item::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-size: 14pt;
         }
 
-        .pricing-content {
+        .pricing-section {
             background: #000;
-            padding: 10px;
-            font-size: 14pt;
-            font-weight: bold;
-        }
-
-        .contact-main {
-            background: white;
-            border: 5px solid #000;
-            padding: 20px;
+            color: white;
+            padding: 0.1in;
             text-align: center;
-            margin: 0.2in 0;
+            margin-bottom: 0.15in;
         }
 
-        .contact-title {
-            font-size: 18pt;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .contact-info {
+        .pricing-title {
             font-size: 14pt;
-            line-height: 1.8;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .pricing-options {
+            font-size: 12pt;
             font-weight: bold;
         }
 
-        .tear-offs {
-            display: flex;
-            justify-content: space-between;
-            border-top: 2px dashed #000;
-            padding-top: 0.2in;
-            margin-top: auto;
-            height: 2.5in;
+        .contact-section {
+            border: 5px solid #000;
+            padding: 0.1in;
+            text-align: center;
+            margin-bottom: 0.1in;
         }
 
-        .tear-off {
+        .limited-spots {
+            font-size: 14pt;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .contact-details {
+            font-size: 11pt;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        .tear-strip-section {
+            border-top: 2px dashed #000;
+            height: 2in;
+            display: flex;
+            padding: 0.25in 0.25in;
+            position: relative;
+        }
+
+        .scissors-icon {
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            font-size: 14pt;
+        }
+
+        .tear-tab {
             flex: 1;
             border-right: 1px dashed #666;
-            padding: 10px 5px;
-            text-align: center;
-            position: relative;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            min-width: 0;
         }
 
-        .tear-off:last-child {
+        .tear-tab:last-child {
             border-right: none;
         }
 
-        .tear-off-title {
-            font-size: 10pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            transform: rotate(180deg);
+        .tear-content {
             writing-mode: vertical-rl;
             text-orientation: mixed;
-        }
-
-        .tear-off-content {
-            font-size: 8pt;
-            line-height: 1.3;
             transform: rotate(180deg);
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            margin: auto;
-        }
-
-        .scissors-line {
-            position: absolute;
-            top: -15px;
-            left: 0;
-            right: 0;
+            font-size: 9pt;
+            line-height: 1.2;
             text-align: center;
-            font-size: 16pt;
-            color: #666;
+            white-space: nowrap;
         }
 
-        .bullet-point {
-            font-size: 14pt;
-            margin: 5px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .bullet-point::before {
-            content: "▶";
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        .highlight-yellow {
-            background: yellow;
-            padding: 2px 5px;
-            font-weight: bold;
+        .tear-title {
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-size: 10pt;
         }
 
         @media print {
             body {
+                width: 8.5in;
+                height: 11in;
                 margin: 0;
                 padding: 0;
             }
             
             .flyer {
-                width: 8.5in;
-                height: 11in;
-                border: none;
-                margin: 0;
+                page-break-after: avoid;
+                page-break-inside: avoid;
             }
 
-            .tear-offs {
+            .tear-strip-section {
                 page-break-inside: avoid;
             }
         }
 
-        @media screen and (max-width: 768px) {
+        @media screen {
+            body {
+                background: #ccc;
+                padding: 20px;
+            }
+            
             .flyer {
-                width: 100%;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .headline {
-                font-size: 32pt;
-            }
-
-            .key-points {
-                grid-template-columns: 1fr;
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
             }
         }
     </style>
@@ -302,167 +267,149 @@
     <div class="flyer">
         <div class="main-content">
             <div class="header">
-                <div class="headline">
-                    <span class="headline-ai">LEARN AI-TDD</span><br>
-                    <span class="headline-tdd">& ADVANCED JAVA</span>
-                </div>
-                <div class="subheadline">
-                    Stop "Vibe Coding" • Start Building Real Systems
-                </div>
+                <div class="headline-top">LEARN AI-TDD</div>
+                <div class="headline-bottom">& ADVANCED JAVA</div>
+                <div class="subheadline">Stop "Vibe Coding" → Build Production Systems</div>
             </div>
 
-            <div class="revolution-box">
-                20-30X FASTER DEVELOPMENT • 95% FEWER BUGS • PRODUCTION-READY CODE
+            <div class="impact-box">
+                🚀 20-30X FASTER DEVELOPMENT • 95% FEWER BUGS • PRODUCTION-READY CODE 🚀
             </div>
 
-            <div class="key-points">
-                <div class="point-box">
-                    <div class="point-title">🚀 AI-TDD METHOD</div>
-                    <div class="point-content">
-                        • Document-driven development<br>
-                        • 18-agent AI systems<br>
-                        • Automated quality gates<br>
-                        • Built Answer42 in 4 weeks!
+            <div class="two-column">
+                <div class="info-box">
+                    <div class="info-title">AI-TDD METHOD</div>
+                    <div class="info-content">
+                        <li>Document-driven specs</li>
+                        <li>18-agent AI systems</li>
+                        <li>Automated quality gates</li>
+                        <li>Built Answer42 in 4 weeks!</li>
                     </div>
                 </div>
-                <div class="point-box">
-                    <div class="point-title">☕ JAVA MASTERY</div>
-                    <div class="point-content">
-                        • Spring Boot 3<br>
-                        • Microservices<br>
-                        • Enterprise patterns<br>
-                        • Real production systems
+                <div class="info-box">
+                    <div class="info-title">JAVA MASTERY</div>
+                    <div class="info-content">
+                        <li>Spring Boot 3 & Spring AI</li>
+                        <li>Microservices architecture</li>
+                        <li>Enterprise patterns</li>
+                        <li>Real production systems</li>
                     </div>
                 </div>
             </div>
 
-            <div class="instructor-box">
+            <div class="instructor-section">
                 <div class="instructor-name">SHAWN JACKSON DYCK</div>
                 <div class="credentials">
-                    20+ Years Senior Java Developer • Creator of AI-TDD Methodology<br>
-                    Built 18-Agent AI Platform • USPS, Verizon, Gov Canada Experience<br>
+                    <strong>20+ Years Senior Java Developer • Creator of AI-TDD Methodology</strong><br>
+                    Built 18-Agent AI Platform (9 Primary + 9 Fallback) • Enterprise Experience: USPS, Verizon, Gov Canada<br>
                     Current AI Software Development Student at Algonquin College
                 </div>
             </div>
 
-            <div style="margin: 0.2in 0;">
-                <div class="bullet-point">Build REAL projects, not toy examples</div>
-                <div class="bullet-point">Master Claude, GPT-4, Spring AI, Ollama</div>
-                <div class="bullet-point">Learn enterprise-grade resilience & fallback systems</div>
-                <div class="bullet-point">GitHub portfolio pieces that get you hired</div>
+            <div class="benefits-section">
+                <div class="benefit-item">Build REAL projects for your GitHub portfolio</div>
+                <div class="benefit-item">Master Claude, GPT-4, Spring AI, Ollama integration</div>
+                <div class="benefit-item">Learn enterprise resilience & fallback systems</div>
+                <div class="benefit-item">Get code that passes Checkstyle, PMD, SpotBugs</div>
             </div>
 
-            <div class="pricing-strip">
-                <div class="pricing-content">
-                    $75/HR • WEEKLY $250 (4 HRS) • BOOTCAMP $900/MONTH
+            <div class="pricing-section">
+                <div class="pricing-title">💰 FLEXIBLE PRICING OPTIONS 💰</div>
+                <div class="pricing-options">
+                    Individual: $75/hr • Weekly Package: $250 (4 hrs) • Monthly Bootcamp: $900
                 </div>
             </div>
 
-            <div class="contact-main">
-                <div class="contact-title">⚡ LIMITED SPOTS - 5 STUDENTS MAX ⚡</div>
-                <div class="contact-info">
-                    📧 shawn@samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn: shawn-jackson-dyck<br>
-                    🌐 samjdtechnologies.com
+            <div class="contact-section">
+                <div class="limited-spots">⚡ LIMITED TO 5 STUDENTS - PERSONALIZED MENTORSHIP ⚡</div>
+                <div class="contact-details">
+                    📧 shawn@samjdtechnologies.com • 📱 604-213-2285<br>
+                    💼 LinkedIn: shawn-jackson-dyck • 🌐 samjdtechnologies.com<br>
+                    <strong>FREE 30-MIN CONSULTATION • OTTAWA (In-Person) or REMOTE</strong>
                 </div>
-            </div>
-
-            <div style="text-align: center; font-size: 12pt; font-weight: bold; margin-top: 0.1in;">
-                FREE 30-MIN CONSULTATION • IN-PERSON (OTTAWA) OR REMOTE
             </div>
         </div>
 
-        <div class="tear-offs">
-            <div class="scissors-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+        <div class="tear-strip-section">
+            <div class="scissors-icon">✂</div>
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
-            <div class="tear-off">
-                <div class="tear-off-title">AI-TDD & JAVA</div>
-                <div class="tear-off-content">
-                    Shawn J.D.<br>
-                    📧 shawn@<br>samjdtechnologies.com<br>
-                    📱 604-213-2285<br>
-                    💼 LinkedIn:<br>shawn-jackson-dyck
+            <div class="tear-tab">
+                <div class="tear-content">
+                    <div class="tear-title">AI-TDD JAVA</div>
+                    Shawn JD<br>
+                    604-213-2285<br>
+                    shawn@<br>samjdtechnologies.com
                 </div>
             </div>
         </div>
