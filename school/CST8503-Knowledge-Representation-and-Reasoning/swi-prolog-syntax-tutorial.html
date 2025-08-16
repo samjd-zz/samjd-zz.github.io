@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWI-Prolog Syntax Complete Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --secondary: #34a853;
+            --accent: #fbbc04;
+            --danger: #ea4335;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --text: #3c4043;
+            --code-bg: #282c34;
+            --gradient: linear-gradient(135deg, #1a73e8 0%, #34a853 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e9 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .nav-btn {
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .nav-btn:hover {
+            background: var(--gradient);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26,115,232,0.3);
+        }
+
+        .nav-btn.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--primary-dark);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+
+        h4 {
+            color: var(--secondary);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--gradient);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .syntax-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .syntax-table th {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .syntax-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .syntax-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .syntax-table code {
+            background: #f0f0f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+            color: var(--primary);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .tip-box::before {
+            content: '💡 ';
+            font-size: 1.2rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 4px solid var(--danger);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box::before {
+            content: '⚠️ ';
+            font-size: 1.2rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .example-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .example-item h5 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background: #fff59d;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .example-grid { grid-template-columns: 1fr; }
+            .nav-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 SWI-Prolog Syntax Tutorial</h1>
+            <p style="font-size: 1.2rem; color: #666;">Complete Guide to Prolog Syntax, Terms, and Language Structure</p>
+        </header>
+
+        <nav class="nav-grid">
+            <button class="nav-btn active" onclick="showSection('terms')">Terms</button>
+            <button class="nav-btn" onclick="showSection('atoms')">Atoms</button>
+            <button class="nav-btn" onclick="showSection('numbers')">Numbers</button>
+            <button class="nav-btn" onclick="showSection('strings')">Strings</button>
+            <button class="nav-btn" onclick="showSection('variables')">Variables</button>
+            <button class="nav-btn" onclick="showSection('compounds')">Compounds</button>
+            <button class="nav-btn" onclick="showSection('lists')">Lists</button>
+            <button class="nav-btn" onclick="showSection('operators')">Operators</button>
+            <button class="nav-btn" onclick="showSection('clauses')">Clauses</button>
+            <button class="nav-btn" onclick="showSection('modules')">Modules</button>
+            <button class="nav-btn" onclick="showSection('comments')">Comments</button>
+            <button class="nav-btn" onclick="showSection('directives')">Directives</button>
+        </nav>
+
+        <!-- TERMS SECTION -->
+        <div id="terms" class="content-section active">
+            <div class="card">
+                <h2>Prolog Terms - The Foundation</h2>
+                <p>Everything in Prolog is a <strong>term</strong>. Terms are the basic building blocks of all Prolog programs.</p>
+                
+                <h3>Term Hierarchy</h3>
+                <div class="code-block" data-lang="Structure">
+Terms
+├── Simple Terms
+│   ├── Atoms (constants)
+│   ├── Numbers (integers, floats)
+│   └── Variables (unknowns)
+└── Compound Terms
+    ├── Structures (functors with arguments)
+    ├── Lists (special notation for structures)
+    └── Strings (sequences of characters)</div>
+
+                <h3>Term Examples</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Type</th>
+                        <th>Examples</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Atom</td>
+                        <td><code>hello</code>, <code>'Hello World'</code>, <code>[]</code></td>
+                        <td>Constants, names</td>
+                    </tr>
+                    <tr>
+                        <td>Number</td>
+                        <td><code>42</code>, <code>3.14</code>, <code>0xFF</code></td>
+                        <td>Numeric values</td>
+                    </tr>
+                    <tr>
+                        <td>Variable</td>
+                        <td><code>X</code>, <code>_result</code>, <code>_</code></td>
+                        <td>Unknowns to be unified</td>
+                    </tr>
+                    <tr>
+                        <td>Compound</td>
+                        <td><code>person(john, 25)</code>, <code>[1,2,3]</code></td>
+                        <td>Structured data</td>
+                    </tr>
+                </table>
+
+                <div class="tip-box">
+                    <strong>Key Concept:</strong> Terms are either instantiated (have a value) or uninstantiated (variables without values). Unification is the process of making terms equal.
+                </div>
+            </div>
+        </div>
+
+        <!-- ATOMS SECTION -->
+        <div id="atoms" class="content-section">
+            <div class="card">
+                <h2>Atoms - Constants and Names</h2>
+                <p>Atoms are the basic constants in Prolog. They represent themselves and are used for names, symbols, and identifiers.</p>
+
+                <h3>Atom Syntax Rules</h3>
+                <div class="example-grid">
+                    <div class="example-item">
+                        <h5>Lowercase Start</h5>
+                        <div class="code-block" data-lang="Prolog">
+% Valid atoms starting with lowercase
+atom
+hello_world
+x123
+camelCase
+snake_case</div>
+                    </div>
+                    <div class="example-item">
+                        <h5>Quoted Atoms</h5>
+                        <div class="code-block" data-lang="Prolog">
+% Atoms with special characters need quotes
+'Hello World'
+'123start'
+'Contains Spaces'
+'Special!@#$%'
+'C:\\Program Files'</div>
+                    </div>
+                </div>
+
+                <h3>Special Atoms</h3>
+                <div class="code-block" data-lang="Prolog">
+% Empty list is an atom
+[]
+
+% Special character sequences
+!  ;  |  
+++  --  **
+==  \==  @<  @>
+
+% Reserved atoms
+true
+fail
+repeat</div>
+
+                <h3>Escape Sequences in Quoted Atoms</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Sequence</th>
+                        <th>Meaning</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><code>\'</code></td>
+                        <td>Single quote</td>
+                        <td><code>'can\'t'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>\\</code></td>
+                        <td>Backslash</td>
+                        <td><code>'C:\\Users'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>\n</code></td>
+                        <td>Newline</td>
+                        <td><code>'line1\nline2'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>\t</code></td>
+                        <td>Tab</td>
+                        <td><code>'col1\tcol2'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>\r</code></td>
+                        <td>Carriage return</td>
+                        <td><code>'text\r\n'</code></td>
+                    </tr>
+                </table>
+
+                <div class="warning-box">
+                    <strong>Common Mistake:</strong> Starting an atom with uppercase makes it a variable! Use quotes if you need an uppercase atom: <code>'John'</code> is an atom, but <code>John</code> is a variable.
+                </div>
+            </div>
+        </div>
+
+        <!-- NUMBERS SECTION -->
+        <div id="numbers" class="content-section">
+            <div class="card">
+                <h2>Numbers - Integers and Floats</h2>
+                
+                <h3>Integer Notation</h3>
+                <div class="code-block" data-lang="Prolog">
+% Decimal (base 10)
+42
+-17
+0
+1_000_000  % Underscores for readability
+
+% Binary (base 2)
+0b1010     % = 10
+0b1111_0000 % = 240
+
+% Octal (base 8)
+0o777      % = 511
+0o10       % = 8
+
+% Hexadecimal (base 16)
+0xFF       % = 255
+0x1A2B     % = 6699
+0xDEAD_BEEF % Large hex number
+
+% Character codes
+0'A        % = 65 (ASCII/Unicode for 'A')
+0'\\       % = 92 (backslash)
+0'\n       % = 10 (newline)</div>
+
+                <h3>Floating Point Numbers</h3>
+                <div class="code-block" data-lang="Prolog">
+% Standard notation
+3.14159
+-0.001
+123.456
+
+% Scientific notation
+1.23e10    % = 12300000000.0
+5.67E-8    % = 0.0000000567
+-2.5e3     % = -2500.0
+
+% Special float values
+1.0Inf     % Positive infinity
+-1.0Inf    % Negative infinity
+1.5NaN     % Not a Number</div>
+
+                <h3>Arithmetic Expressions</h3>
+                <div class="code-block" data-lang="Prolog">
+% Arithmetic evaluation with 'is'
+?- X is 2 + 3 * 4.
+X = 14.
+
+% Integer operations
+?- X is 17 div 5.    % Integer division
+X = 3.
+
+?- X is 17 mod 5.    % Modulo
+X = 2.
+
+?- X is 17 rem 5.    % Remainder
+X = 2.
+
+% Bitwise operations
+?- X is 5 /\ 3.      % AND: 0101 & 0011 = 0001
+X = 1.
+
+?- X is 5 \/ 3.      % OR: 0101 | 0011 = 0111
+X = 7.
+
+?- X is 5 xor 3.     % XOR: 0101 ^ 0011 = 0110
+X = 6.
+
+?- X is 5 << 2.      % Left shift
+X = 20.
+
+?- X is 20 >> 2.     % Right shift
+X = 5.</div>
+
+                <div class="tip-box">
+                    <strong>Type Checking:</strong> Use <code>integer/1</code>, <code>float/1</code>, and <code>number/1</code> to check number types:
+                    <code>?- integer(42).</code> → true, <code>?- float(3.14).</code> → true
+                </div>
+            </div>
+        </div>
+
+        <!-- STRINGS SECTION -->
+        <div id="strings" class="content-section">
+            <div class="card">
+                <h2>Strings - Text Handling</h2>
+                <p>SWI-Prolog has three ways to represent text: atoms, strings, and character codes.</p>
+
+                <h3>String Types Comparison</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Type</th>
+                        <th>Syntax</th>
+                        <th>Example</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Atom</td>
+                        <td>Single quotes</td>
+                        <td><code>'hello'</code></td>
+                        <td>Identifiers, constants</td>
+                    </tr>
+                    <tr>
+                        <td>String</td>
+                        <td>Double quotes</td>
+                        <td><code>"hello"</code></td>
+                        <td>Text manipulation</td>
+                    </tr>
+                    <tr>
+                        <td>Codes</td>
+                        <td>Backticks</td>
+                        <td><code>`hello`</code></td>
+                        <td>Character processing</td>
+                    </tr>
+                </table>
+
+                <h3>String Operations</h3>
+                <div class="code-block" data-lang="Prolog">
+% String creation and manipulation
+?- string_concat("Hello, ", "World!", S).
+S = "Hello, World!".
+
+?- string_length("Prolog", L).
+L = 6.
+
+?- sub_string("Hello World", 0, 5, _, Sub).
+Sub = "Hello".
+
+?- sub_string("Hello World", _, 5, 0, Sub).
+Sub = "World".
+
+% String predicates
+?- string_chars("ABC", Chars).
+Chars = ['A', 'B', 'C'].
+
+?- string_codes("ABC", Codes).
+Codes = [65, 66, 67].
+
+% Case conversion
+?- string_upper("hello", Upper).
+Upper = "HELLO".
+
+?- string_lower("HELLO", Lower).
+Lower = "hello".
+
+% String splitting
+?- split_string("a,b,c", ",", "", Parts).
+Parts = ["a", "b", "c"].
+
+% Pattern matching with strings
+?- "Hello" = "Hello".
+true.
+
+?- String = "Dynamic " + "String".
+String = "Dynamic String".</div>
+
+                <h3>Character Escapes</h3>
+                <div class="code-block" data-lang="Prolog">
+% Escape sequences work in all string types
+"Line 1\nLine 2"        % Newline
+"Tab\there"             % Tab
+"Quote: \"text\""       % Double quote
+'Single: \''            % Single quote in atom
+"Backslash: \\"         % Backslash
+"Unicode: \u0041"       % Unicode (A)
+"Hex: \x41"            % Hexadecimal (A)</div>
+
+                <div class="success-box">
+                    <strong>Best Practice:</strong> Use strings (<code>"..."</code>) for text that will be manipulated, atoms (<code>'...'</code>) for identifiers, and character codes (<code>`...`</code>) for low-level character processing.
+                </div>
+            </div>
+        </div>
+
+        <!-- VARIABLES SECTION -->
+        <div id="variables" class="content-section">
+            <div class="card">
+                <h2>Variables - Logical Variables</h2>
+                <p>Variables in Prolog are placeholders for values that are determined through unification.</p>
+
+                <h3>Variable Naming Rules</h3>
+                <div class="code-block" data-lang="Prolog">
+% Variables start with uppercase or underscore
+X
+Variable
+Result
+PersonName
+_temp
+_123
+
+% Anonymous variable (different each time)
+_
+
+% Named singleton (warns if used once)
+_MyVariable
+
+% Invalid variable names (these are atoms!)
+variable   % lowercase start
+123var     % number start
+'Var'      % quoted</div>
+
+                <h3>Variable Scope and Binding</h3>
+                <div class="code-block" data-lang="Prolog">
+% Variables are scoped to a clause
+parent(X, Y) :- father(X, Y).
+parent(X, Y) :- mother(X, Y).
+% X and Y in each clause are independent
+
+% Unification binds variables
+?- X = 42, Y = X.
+X = Y = 42.
+
+% Once bound, must match
+?- X = 5, X = 6.
+false.
+
+% Anonymous variables don't bind
+?- _ = 5, _ = 6.
+true.
+
+% Singleton variables (use once)
+bad_rule(X) :- some_pred(Y).  % Warning: Y is singleton
+
+% Fix with anonymous variable
+good_rule(X) :- some_pred(_).
+
+% Or use named singleton
+good_rule(X) :- some_pred(_Y).</div>
+
+                <h3>Variable Inspection</h3>
+                <div class="code-block" data-lang="Prolog">
+% Check if variable is unbound
+?- var(X).
+true.
+
+?- X = 5, var(X).
+false.
+
+% Check if bound (nonvar)
+?- nonvar(42).
+true.
+
+?- nonvar(X).
+false.
+
+% Ground check (no variables)
+?- ground(person(john, 25)).
+true.
+
+?- ground(person(X, 25)).
+false.
+
+% Variable naming for debugging
+?- X = Y, Y = Z, Z = 42.
+X = Y, Y = Z, Z = 42.</div>
+
+                <div class="warning-box">
+                    <strong>Important:</strong> Prolog variables are <span class="highlight">single-assignment</span>. Once unified with a value, they cannot be changed within the same proof search branch. This is different from imperative programming!
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPOUNDS SECTION -->
+        <div id="compounds" class="content-section">
+            <div class="card">
+                <h2>Compound Terms - Structures</h2>
+                <p>Compound terms combine a functor (name) with arguments to create structured data.</p>
+
+                <h3>Basic Structure</h3>
+                <div class="code-block" data-lang="Prolog">
+% functor(arg1, arg2, ..., argN)
+person(john, 25)
+date(2024, 12, 25)
+tree(node(1, leaf, leaf))
+
+% Functor with 0 arguments is an atom
+foo()  % Same as atom: foo
+
+% Nested structures
+employee(
+    person(name('John', 'Doe'), age(30)),
+    position('Developer'),
+    salary(75000)
+)
+
+% Getting functor information
+?- functor(person(john, 25), F, A).
+F = person,
+A = 2.
+
+% Creating structure from functor
+?- functor(Term, person, 2).
+Term = person(_, _).
+
+% Accessing arguments
+?- arg(1, person(john, 25), Arg).
+Arg = john.
+
+?- arg(2, person(john, 25), Arg).
+Arg = 25.</div>
+
+                <h3>Term Comparison</h3>
+                <div class="code-block" data-lang="Prolog">
+% Unification (=)
+?- person(X, 25) = person(john, Y).
+X = john,
+Y = 25.
+
+% Structural equality (==)
+?- X == Y.
+false.
+
+?- X = Y, X == Y.
+X = Y.
+
+% Structural inequality (\==)
+?- X \== Y.
+true.
+
+% Term comparison (@<, @>, @=<, @>=)
+?- atom @< 123.       % Atoms before numbers
+true.
+
+?- f(1) @< f(2).     % Argument comparison
+true.
+
+% Standard order of terms:
+% 1. Variables (by age)
+% 2. Numbers (by value)
+% 3. Atoms (alphabetically)
+% 4. Strings (alphabetically)
+% 5. Compound terms (by functor, then arguments)</div>
+
+                <h3>Term Manipulation</h3>
+                <div class="code-block" data-lang="Prolog">
+% Copy term (with fresh variables)
+?- copy_term(p(X, X), Copy).
+Copy = p(_A, _A).
+
+% Term expansion/modification
+?- Term = person(john, Age),
+   Age = 25.
+Term = person(john, 25).
+
+% Decomposing terms
+?- person(john, 25) =.. List.
+List = [person, john, 25].
+
+% Composing terms
+?- Term =.. [person, john, 25].
+Term = person(john, 25).
+
+% Term substitution
+?- substitute(f(a, b, a), a, x, Result).
+Result = f(x, b, x).</div>
+
+                <div class="tip-box">
+                    <strong>Design Pattern:</strong> Use compound terms to create data structures. For example, a binary tree: <code>tree(Value, Left, Right)</code> or <code>leaf</code>.
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTS SECTION -->
+        <div id="lists" class="content-section">
+            <div class="card">
+                <h2>Lists - Special Compound Terms</h2>
+                <p>Lists are fundamental in Prolog, with special syntax for convenience.</p>
+
+                <h3>List Notation</h3>
+                <div class="code-block" data-lang="Prolog">
+% Empty list
+[]
+
+% List enumeration
+[1, 2, 3]
+[a, b, c]
+[person(john, 25), person(jane, 30)]
+
+% Head-tail notation
+[H|T]           % H is first element, T is rest
+[1|[2, 3]]      % Same as [1, 2, 3]
+[1, 2|[3, 4]]   % Same as [1, 2, 3, 4]
+[1, 2|[]]       % Same as [1, 2]
+
+% Improper lists (avoid these!)
+[1|2]           % Tail is not a list
+[1, 2|3]        % Tail is not a list
+
+% Lists are actually compound terms
+% [1, 2] is syntactic sugar for:
+% .(1, .(2, []))
+
+% Pattern matching with lists
+?- [H|T] = [1, 2, 3].
+H = 1,
+T = [2, 3].
+
+?- [X, Y|Rest] = [a, b, c, d].
+X = a,
+Y = b,
+Rest = [c, d].
+
+?- [_, Second|_] = [1, 2, 3, 4].
+Second = 2.</div>
+
+                <h3>List Operations</h3>
+                <div class="code-block" data-lang="Prolog">
+% Length
+?- length([a, b, c], L).
+L = 3.
+
+?- length(List, 3).
+List = [_A, _B, _C].
+
+% Membership
+?- member(2, [1, 2, 3]).
+true.
+
+?- member(X, [a, b, c]).
+X = a ;
+X = b ;
+X = c.
+
+% Append
+?- append([1, 2], [3, 4], L).
+L = [1, 2, 3, 4].
+
+?- append(L1, L2, [1, 2, 3]).
+L1 = [], L2 = [1, 2, 3] ;
+L1 = [1], L2 = [2, 3] ;
+L1 = [1, 2], L2 = [3] ;
+L1 = [1, 2, 3], L2 = [].
+
+% Reverse
+?- reverse([1, 2, 3], R).
+R = [3, 2, 1].
+
+% Select/Remove
+?- select(2, [1, 2, 3], R).
+R = [1, 3].
+
+% Nth element (0-indexed)
+?- nth0(1, [a, b, c], E).
+E = b.
+
+% Nth element (1-indexed)  
+?- nth1(2, [a, b, c], E).
+E = b.</div>
+
+                <h3>List Comprehension (findall, bagof, setof)</h3>
+                <div class="code-block" data-lang="Prolog">
+% Collect all solutions
+?- findall(X, member(X, [1, 2, 3, 2]), L).
+L = [1, 2, 3, 2].
+
+% With condition
+?- findall(X, (member(X, [1, 2, 3, 4]), X > 2), L).
+L = [3, 4].
+
+% Bagof - backtracks over free variables
+?- bagof(X, member(X, [1, 2, 3]), L).
+L = [1, 2, 3].
+
+% Setof - sorted and unique
+?- setof(X, member(X, [3, 1, 2, 1]), L).
+L = [1, 2, 3].
+
+% Template with findall
+?- findall(pair(X, Y), 
+           (member(X, [1, 2]), member(Y, [a, b])), 
+           Pairs).
+Pairs = [pair(1,a), pair(1,b), pair(2,a), pair(2,b)].</div>
+            </div>
+        </div>
+
+        <!-- OPERATORS SECTION -->
+        <div id="operators" class="content-section">
+            <div class="card">
+                <h2>Operators - Syntactic Sugar</h2>
+                <p>Operators allow infix, prefix, and postfix notation for better readability.</p>
+
+                <h3>Built-in Operators</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Operator</th>
+                        <th>Type</th>
+                        <th>Precedence</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td><code>:-</code></td>
+                        <td>xfx</td>
+                        <td>1200</td>
+                        <td>Rule definition</td>
+                    </tr>
+                    <tr>
+                        <td><code>,</code></td>
+                        <td>xfy</td>
+                        <td>1000</td>
+                        <td>Conjunction (AND)</td>
+                    </tr>
+                    <tr>
+                        <td><code>;</code></td>
+                        <td>xfy</td>
+                        <td>1100</td>
+                        <td>Disjunction (OR)</td>
+                    </tr>
+                    <tr>
+                        <td><code>=</code></td>
+                        <td>xfx</td>
+                        <td>700</td>
+                        <td>Unification</td>
+                    </tr>
+                    <tr>
+                        <td><code>is</code></td>
+                        <td>xfx</td>
+                        <td>700</td>
+                        <td>Arithmetic evaluation</td>
+                    </tr>
+                    <tr>
+                        <td><code>==</code></td>
+                        <td>xfx</td>
+                        <td>700</td>
+                        <td>Structural equality</td>
+                    </tr>
+                    <tr>
+                        <td><code>@<</code></td>
+                        <td>xfx</td>
+                        <td>700</td>
+                        <td>Term comparison</td>
+                    </tr>
+                    <tr>
+                        <td><code>+</code></td>
+                        <td>yfx</td>
+                        <td>500</td>
+                        <td>Addition</td>
+                    </tr>
+                    <tr>
+                        <td><code>*</code></td>
+                        <td>yfx</td>
+                        <td>400</td>
+                        <td>Multiplication</td>
+                    </tr>
+                </table>
+
+                <h3>Operator Types</h3>
+                <div class="code-block" data-lang="Prolog">
+% Operator type notation:
+% f = operator
+% x = argument (lower precedence)
+% y = argument (same or lower precedence)
+
+% Infix operators
+% xfx: non-associative (a op b op c is error)
+% xfy: right-associative (a op b op c = a op (b op c))
+% yfx: left-associative (a op b op c = (a op b) op c)
+
+% Examples:
+% xfx: =, ==, \==, is
+% xfy: ,  ;  ->
+% yfx: +, -, *, /
+
+% Prefix operators
+% fx: non-associative (op op a is error)
+% fy: associative (op op a is valid)
+
+% Examples:
+% fx: ?-
+% fy: \+, -
+
+% Postfix operators
+% xf: non-associative
+% yf: associative (rarely used)</div>
+
+                <h3>Custom Operators</h3>
+                <div class="code-block" data-lang="Prolog">
+% Define custom operator
+:- op(900, xfx, likes).
+:- op(800, xfy, and).
+:- op(300, yfx, located_at).
+
+% Now we can write:
+john likes mary.
+john likes pizza and beer.
+john located_at home.
+
+% Instead of:
+likes(john, mary).
+likes(john, and(pizza, beer)).
+located_at(john, home).
+
+% Check operator definition
+?- current_op(Prec, Type, likes).
+Prec = 900,
+Type = xfx.
+
+% Remove operator (set precedence to 0)
+:- op(0, xfx, likes).
+
+% Operator precedence example
+:- op(700, xfx, is_in).
+:- op(600, xfx, city).
+:- op(500, xfx, country).
+
+paris city france.
+john is_in paris city france.
+% Parses as: is_in(john, city(paris, france))</div>
+
+                <div class="warning-box">
+                    <strong>Caution:</strong> Overuse of custom operators can make code harder to read. Use them sparingly for domain-specific languages or when they significantly improve clarity.
+                </div>
+            </div>
+        </div>
+
+        <!-- CLAUSES SECTION -->
+        <div id="clauses" class="content-section">
+            <div class="card">
+                <h2>Clauses - Rules and Facts</h2>
+                <p>Prolog programs consist of clauses that define facts and rules.</p>
+
+                <h3>Clause Types</h3>
+                <div class="code-block" data-lang="Prolog">
+% Facts (unit clauses)
+parent(tom, bob).
+age(john, 25).
+student(mary).
+
+% Rules (headed clauses)
+father(X, Y) :- parent(X, Y), male(X).
+grandparent(X, Z) :- parent(X, Y), parent(Y, Z).
+
+% Queries (goal clauses)
+?- parent(tom, X).
+?- father(F, bob), age(F, A).
+
+% Directives (headless clauses)
+:- dynamic(score/2).
+:- use_module(library(lists)).
+
+% Clause anatomy:
+% head :- body.
+% head = atom or compound term
+% body = goal(s) separated by , (and) or ; (or)
+
+% Multiple clauses for same predicate
+sibling(X, Y) :- 
+    parent(P, X),
+    parent(P, Y),
+    X \= Y.
+
+sibling(X, Y) :- 
+    mother(M, X),
+    mother(M, Y),
+    father(F, X),
+    father(F, Y),
+    X \= Y.</div>
+
+                <h3>Goal Execution</h3>
+                <div class="code-block" data-lang="Prolog">
+% Conjunction (AND) - all must succeed
+happy(X) :- 
+    healthy(X),
+    wealthy(X),
+    wise(X).
+
+% Disjunction (OR) - one must succeed
+student_discount(X) :-
+    student(X);
+    (age(X, A), A < 18);
+    senior_citizen(X).
+
+% If-then-else
+max(X, Y, Max) :-
+    (X > Y -> Max = X ; Max = Y).
+
+% Negation as failure
+not_student(X) :- \+ student(X).
+
+% Cut (!) - prevent backtracking
+first_solution(X) :-
+    generate(X),
+    test(X),
+    !.  % Don't try other solutions
+
+% Fail - force failure
+never_true :- fail.
+
+% True - always succeeds
+always_true :- true.</div>
+
+                <h3>Definite Clause Grammars (DCG)</h3>
+                <div class="code-block" data-lang="Prolog">
+% DCG notation for parsing
+sentence --> noun_phrase, verb_phrase.
+noun_phrase --> determiner, noun.
+verb_phrase --> verb, noun_phrase.
+
+determiner --> [the].
+determiner --> [a].
+noun --> [cat].
+noun --> [dog].
+verb --> [chases].
+verb --> [sees].
+
+% DCG with arguments
+number(N) --> digit(D), { N is D }.
+number(N) --> digit(D), number(N1), { N is D*10 + N1 }.
+digit(D) --> [C], { C >= 0'0, C =< 0'9, D is C - 0'0 }.
+
+% DCG with extra arguments
+palindrome --> [].
+palindrome --> [_].
+palindrome --> [X], palindrome, [X].
+
+% Using DCG
+?- phrase(sentence, [the, cat, chases, a, dog]).
+true.
+
+?- phrase(sentence, Sentence).
+Sentence = [the, cat, chases, the, cat] ;
+Sentence = [the, cat, chases, the, dog] ;
+% etc...</div>
+            </div>
+        </div>
+
+        <!-- MODULES SECTION -->
+        <div id="modules" class="content-section">
+            <div class="card">
+                <h2>Modules - Code Organization</h2>
+                <p>Modules provide namespace management and encapsulation in Prolog.</p>
+
+                <h3>Module Definition</h3>
+                <div class="code-block" data-lang="Prolog">
+% Module declaration
+:- module(my_module, [
+    exported_pred/2,    % Export predicate with arity 2
+    another_pred/1,
+    op(900, xfx, '=>')  % Export operator
+]).
+
+% Module implementation
+exported_pred(X, Y) :- 
+    internal_helper(X, Z),
+    process(Z, Y).
+
+another_pred(X) :- 
+    exported_pred(X, _).
+
+% Private predicates (not exported)
+internal_helper(X, Y) :- 
+    Y is X * 2.
+
+process(X, Y) :- 
+    Y is X + 1.</div>
+
+                <h3>Using Modules</h3>
+                <div class="code-block" data-lang="Prolog">
+% Import module
+:- use_module(my_module).
+:- use_module(library(lists)).  % Standard library
+
+% Import specific predicates
+:- use_module(my_module, [exported_pred/2]).
+
+% Import with renaming
+:- use_module(my_module, [
+    exported_pred/2 as my_pred/2
+]).
+
+% Qualified calls (without importing)
+?- my_module:exported_pred(1, X).
+
+% Import from file
+:- use_module('path/to/file.pl').
+
+% Conditional loading
+:- if(exists_source(library(ssl))).
+:- use_module(library(ssl)).
+:- endif.
+
+% Module prefixes
+?- lists:member(X, [1,2,3]).
+X = 1 ;
+X = 2 ;
+X = 3.</div>
+
+                <h3>Module Inspection</h3>
+                <div class="code-block" data-lang="Prolog">
+% Current module
+?- module(Current).
+Current = user.
+
+% List loaded modules
+?- module_property(Module, file(File)).
+
+% Module exports
+?- module_property(lists, exports(Exports)).
+
+% Check module predicate
+?- current_predicate(lists:member/2).
+true.
+
+% Module transparent predicates
+:- module_transparent helper/1.
+
+helper(Goal) :- 
+    % Executes in caller's module context
+    call(Goal).</div>
+
+                <div class="tip-box">
+                    <strong>Best Practice:</strong> Use modules to organize large programs. Export only the public interface, keeping helper predicates private.
+                </div>
+            </div>
+        </div>
+
+        <!-- COMMENTS SECTION -->
+        <div id="comments" class="content-section">
+            <div class="card">
+                <h2>Comments and Documentation</h2>
+
+                <h3>Comment Types</h3>
+                <div class="code-block" data-lang="Prolog">
+% Single line comment
+% This is ignored by Prolog
+
+/* Multi-line comment
+   Can span multiple lines
+   Useful for longer explanations
+*/
+
+/* Nested /* comments */ are allowed in SWI-Prolog */
+
+%% Documentation comment (two percent signs)
+%% Often used for predicate documentation
+
+%! Documentation comment (percent-bang)
+%! Used by PlDoc documentation system
+
+/** PlDoc structured comment
+ * Can include formatting
+ * @param X The input value
+ * @param Y The output value
+ * @see related_predicate/2
+ */</div>
+
+                <h3>PlDoc Documentation</h3>
+                <div class="code-block" data-lang="Prolog">
+%! predicate_name(+Input, -Output) is det.
+%
+%  Predicate description here.
+%  
+%  @param Input Description of input parameter
+%  @param Output Description of output parameter
+%  @throws error(type, context) if something goes wrong
+%  @see related_predicate/2
+%
+predicate_name(Input, Output) :-
+    process(Input, Output).
+
+%% Mode indicators:
+%  + Input argument (instantiated)
+%  - Output argument (uninstantiated)
+%  ? Either input or output
+%  : Argument is meta (goal/clause)
+%  @ Argument not changed
+%  ! Argument is mutable
+
+%% Determinism indicators:
+%  det    - Deterministic (exactly one solution)
+%  semidet - Semi-deterministic (zero or one solution)
+%  multi  - Multiple solutions (at least one)
+%  nondet - Non-deterministic (zero or more)
+
+%! calculate(+X:number, +Y:number, -Result:number) is det.
+%
+%  Calculate the sum of X and Y.
+%  
+%  ==
+%  ?- calculate(2, 3, R).
+%  R = 5.
+%  ==
+%
+calculate(X, Y, Result) :-
+    Result is X + Y.</div>
+
+                <h3>Best Documentation Practices</h3>
+                <div class="code-block" data-lang="Prolog">
+%% File header
+/*  File:    my_module.pl
+    Author:  Your Name
+    Date:    2024-12-28
+    Purpose: Module for handling X functionality
+*/
+
+:- module(my_module, [
+    main_predicate/2,  % Brief description
+    helper/1           % Another description
+]).
+
+/** <module> My Module Title
+ 
+    Longer description of what this module does.
+    Can include multiple paragraphs.
+    
+    @author Your Name
+    @license MIT
+    @version 1.0.0
+*/
+
+%! main_predicate(+Input, -Output) is det.
+%
+%  Does something important.
+%  
+%  Examples:
+%  ==
+%  ?- main_predicate(test, X).
+%  X = result.
+%  ==
+%
+main_predicate(Input, Output) :-
+    % Inline comments for complex logic
+    step1(Input, Temp),    % First transformation
+    step2(Temp, Output).   % Final processing</div>
+            </div>
+        </div>
+
+        <!-- DIRECTIVES SECTION -->
+        <div id="directives" class="content-section">
+            <div class="card">
+                <h2>Directives - Compile-time Instructions</h2>
+                <p>Directives are instructions to the Prolog compiler/interpreter, starting with <code>:-</code>.</p>
+
+                <h3>Common Directives</h3>
+                <div class="code-block" data-lang="Prolog">
+% Dynamic predicate declaration
+:- dynamic fact/1.
+:- dynamic score/2.
+
+% Multifile predicate (defined across files)
+:- multifile hook/1.
+
+% Discontiguous predicate (non-consecutive clauses)
+:- discontiguous pred/1.
+
+% Table (memoization) for efficiency
+:- table fibonacci/2.
+
+% Operator definition
+:- op(900, xfx, likes).
+
+% Module directive
+:- module(my_module, [exported/1]).
+
+% Include other files
+:- include('common_predicates.pl').
+
+% Conditional compilation
+:- if(current_prolog_flag(version, Version)).
+    % Version-specific code
+:- endif.
+
+% Initialization
+:- initialization(main).
+:- initialization(setup, now).  % Run immediately
+
+% Character encoding
+:- encoding(utf8).
+
+% Style checking
+:- style_check(+atom).     % Enable atom style check
+:- style_check(-singleton). % Disable singleton warnings</div>
+
+                <h3>Library Loading</h3>
+                <div class="code-block" data-lang="Prolog">
+% Load SWI-Prolog libraries
+:- use_module(library(lists)).
+:- use_module(library(apply)).
+:- use_module(library(clpfd)).     % Constraint solving
+:- use_module(library(dcg/basics)). % DCG utilities
+:- use_module(library(http/http_server)). % Web server
+
+% Conditional loading
+:- if(\+ current_module(lists)).
+:- use_module(library(lists)).
+:- endif.
+
+% Load with specific imports
+:- use_module(library(lists), [
+    member/2,
+    append/3,
+    reverse/2
+]).
+
+% Ensure loaded (load if not already)
+:- ensure_loaded('utilities.pl').
+
+% Consult (reload) file
+:- consult('data.pl').</div>
+
+                <h3>Meta-Predicates</h3>
+                <div class="code-block" data-lang="Prolog">
+% Declare meta-predicate signatures
+:- meta_predicate
+    map(1, ?),          % 1 = goal with 1 extra argument
+    map(2, ?, ?),       % 2 = goal with 2 extra arguments
+    if_then_else(0, 0, 0). % 0 = goal with no extra arguments
+
+% Implementation
+map(_, []).
+map(Goal, [H|T]) :-
+    call(Goal, H),      % Add 1 argument
+    map(Goal, T).
+
+% Usage
+?- map(integer, [1, 2, 3]).
+true.
+
+% Module transparent
+:- module_transparent my_findall/3.
+
+my_findall(Template, Goal, List) :-
+    findall(Template, Goal, List).</div>
+
+                <h3>Constraints and Flags</h3>
+                <div class="code-block" data-lang="Prolog">
+% Set Prolog flags
+:- set_prolog_flag(verbose, silent).
+:- set_prolog_flag(optimise, true).
+:- set_prolog_flag(double_quotes, string).
+
+% Current flags
+?- current_prolog_flag(Flag, Value).
+
+% Constraint handling rules (CHR)
+:- use_module(library(chr)).
+:- chr_constraint leq/2.
+
+% CLP(FD) constraints
+:- use_module(library(clpfd)).
+
+% Tabling options
+:- table pred/2 as subsumptive.
+:- table pred/2 as variant.
+:- table (pred/2 as incremental).</div>
+
+                <div class="success-box">
+                    <strong>Summary:</strong> You now know the complete SWI-Prolog syntax! From basic terms to advanced module systems, you have all the building blocks for writing sophisticated Prolog programs.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Mark button as active
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
