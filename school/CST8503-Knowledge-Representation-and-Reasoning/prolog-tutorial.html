@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Prolog Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b35;
+            --primary-dark: #e55a2b;
+            --secondary: #4ecdc4;
+            --accent: #95e1d3;
+            --warning: #ffd93d;
+            --success: #6bcf7f;
+            --danger: #ff6b6b;
+            --dark: #2d3436;
+            --light: #f5f3f0;
+            --text: #2d3436;
+            --code-bg: #282c34;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .code-block::before {
+            content: 'Prolog';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .query-example {
+            background: #f0f9ff;
+            border-left: 4px solid #4ecdc4;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .query-example strong {
+            color: #4ecdc4;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #fdcb6e;
+        }
+
+        .tip-box::before {
+            content: '💡 ';
+            font-size: 1.2rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box::before {
+            content: '⚠️ ';
+            font-size: 1.2rem;
+        }
+
+        .exercise-box {
+            background: linear-gradient(135deg, #a8e6cf 0%, #81c784 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .exercise-box h4 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .highlight {
+            background: #ffd93d;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .concept-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦉 Prolog Programming Tutorial</h1>
+            <p class="subtitle">Learn Logic Programming Through Interactive Examples</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showSection('basics')">Basics</button>
+            <button class="tab-btn" onclick="showSection('lists')">Lists</button>
+            <button class="tab-btn" onclick="showSection('arithmetic')">Arithmetic</button>
+            <button class="tab-btn" onclick="showSection('database')">Database</button>
+            <button class="tab-btn" onclick="showSection('search')">Search</button>
+            <button class="tab-btn" onclick="showSection('constraints')">Constraints</button>
+            <button class="tab-btn" onclick="showSection('dcg')">Grammars</button>
+            <button class="tab-btn" onclick="showSection('meta')">Meta-Programming</button>
+            <button class="tab-btn" onclick="showSection('io')">File I/O</button>
+            <button class="tab-btn" onclick="showSection('debug')">Debugging</button>
+        </nav>
+
+        <!-- BASICS SECTION -->
+        <div id="basics" class="content-section active">
+            <div class="section-card">
+                <h2>1. Basic Facts and Queries</h2>
+                
+                <p>Prolog is a logic programming language based on facts, rules, and queries. Let's start with a simple family tree example:</p>
+
+                <h3>Facts: Stating What We Know</h3>
+                <div class="code-block">% Family relationships - these are FACTS
+parent(tom, bob).
+parent(tom, liz).
+parent(bob, ann).
+parent(bob, pat).
+parent(pat, jim).
+
+% Gender facts
+male(tom).
+male(bob).
+male(jim).
+male(pat).
+female(liz).
+female(ann).</div>
+
+                <div class="tip-box">
+                    <strong>Key Concept:</strong> Facts are the basic building blocks. They state what is true in our knowledge base. The format is: <code>predicate(argument1, argument2, ...).</code>
+                </div>
+
+                <h3>Rules: Defining Relationships</h3>
+                <div class="code-block">% Rules define new relationships based on existing facts
+father(X, Y) :- parent(X, Y), male(X).
+mother(X, Y) :- parent(X, Y), female(X).
+grandparent(X, Z) :- parent(X, Y), parent(Y, Z).
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.</div>
+
+                <div class="query-example">
+                    <strong>Try These Queries:</strong>
+                    <code>?- father(tom, X).</code> → Finds all children of Tom<br>
+                    <code>?- grandparent(tom, X).</code> → Finds all grandchildren of Tom<br>
+                    <code>?- sibling(ann, X).</code> → Finds Ann's siblings
+                </div>
+
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>Variables</h4>
+                        <p>Start with uppercase (X, Y, Person) or underscore (_). They represent unknown values Prolog will try to find.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Atoms</h4>
+                        <p>Start with lowercase (tom, bob, parent). They represent concrete values or predicates.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Rules</h4>
+                        <p>Use :- (if) to define conditions. Comma (,) means AND, semicolon (;) means OR.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTS SECTION -->
+        <div id="lists" class="content-section">
+            <div class="section-card">
+                <h2>2. Lists and Recursion</h2>
+                
+                <p>Lists are fundamental data structures in Prolog. They're written as [Head|Tail] where Head is the first element and Tail is the rest.</p>
+
+                <h3>List Membership</h3>
+                <div class="code-block">% Check if X is a member of a list
+member(X, [X|_]).              % X is the head of the list
+member(X, [_|T]) :- member(X, T).  % X is somewhere in the tail</div>
+
+                <h3>Common List Operations</h3>
+                <div class="code-block">% Calculate list length
+list_length([], 0).
+list_length([_|T], N) :- 
+    list_length(T, N1), 
+    N is N1 + 1.
+
+% Append two lists
+append([], L, L).
+append([H|T1], L2, [H|T3]) :- 
+    append(T1, L2, T3).
+
+% Reverse a list
+reverse([], []).
+reverse([H|T], R) :- 
+    reverse(T, RT), 
+    append(RT, [H], R).
+
+% Sum all elements in a list
+sum_list([], 0).
+sum_list([H|T], Sum) :- 
+    sum_list(T, RestSum), 
+    Sum is H + RestSum.
+
+% Find maximum element
+max_list([X], X).
+max_list([H|T], Max) :- 
+    max_list(T, MaxT),
+    (H > MaxT -> Max = H ; Max = MaxT).</div>
+
+                <div class="query-example">
+                    <strong>Example Queries:</strong>
+                    <code>?- member(3, [1,2,3,4]).</code> → true<br>
+                    <code>?- list_length([a,b,c,d], L).</code> → L = 4<br>
+                    <code>?- reverse([1,2,3], R).</code> → R = [3,2,1]<br>
+                    <code>?- sum_list([1,2,3,4,5], S).</code> → S = 15
+                </div>
+
+                <div class="tip-box">
+                    <strong>Pattern Matching:</strong> The [H|T] notation is powerful. H matches the first element (head), T matches the rest (tail). An empty list [] is the base case for recursion.<br><br>
+                    <strong>Anonymous Variable:</strong> Use underscore (_) when you don't care about a value. Each underscore is a different anonymous variable.
+                </div>
+            </div>
+        </div>
+
+        <!-- ARITHMETIC SECTION -->
+        <div id="arithmetic" class="content-section">
+            <div class="section-card">
+                <h2>3. Arithmetic and Logic</h2>
+                
+                <h3>Classic Recursive Algorithms</h3>
+                
+                <div class="code-block">% Factorial: n! = n × (n-1) × ... × 1
+factorial(0, 1).
+factorial(N, F) :- 
+    N > 0,
+    N1 is N - 1,
+    factorial(N1, F1),
+    F is N * F1.
+
+% Fibonacci sequence
+fibonacci(0, 0).
+fibonacci(1, 1).
+fibonacci(N, F) :-
+    N > 1,
+    N1 is N - 1,
+    N2 is N - 2,
+    fibonacci(N1, F1),
+    fibonacci(N2, F2),
+    F is F1 + F2.
+
+% Greatest Common Divisor (Euclidean algorithm)
+gcd(X, 0, X) :- X > 0.
+gcd(X, Y, G) :- 
+    Y > 0,
+    R is X mod Y,
+    gcd(Y, R, G).
+
+% Check if a number is prime
+is_prime(2).
+is_prime(N) :-
+    N > 2,
+    N mod 2 =\= 0,
+    \+ has_factor(N, 3).
+
+has_factor(N, F) :-
+    F * F =< N,
+    (N mod F =:= 0 ; 
+     F2 is F + 2,
+     has_factor(N, F2)).</div>
+
+                <div class="warning-box">
+                    <strong>Important:</strong> Use 'is' for arithmetic evaluation. The expression <code>X = 2 + 3</code> unifies X with the term '2+3', while <code>X is 2 + 3</code> evaluates to 5.<br><br>
+                    <strong>Arithmetic Operators:</strong><br>
+                    • <code>is</code> - Arithmetic evaluation<br>
+                    • <code>=:=</code> - Arithmetic equality test<br>
+                    • <code>=\=</code> - Arithmetic inequality<br>
+                    • <code>mod</code> - Modulo operator<br>
+                    • <code>abs</code> - Absolute value
+                </div>
+
+                <div class="query-example">
+                    <strong>Try These:</strong>
+                    <code>?- factorial(5, F).</code> → F = 120<br>
+                    <code>?- fibonacci(10, F).</code> → F = 55<br>
+                    <code>?- gcd(48, 18, G).</code> → G = 6<br>
+                    <code>?- is_prime(17).</code> → true
+                </div>
+            </div>
+        </div>
+
+        <!-- DATABASE SECTION -->
+        <div id="database" class="content-section">
+            <div class="section-card">
+                <h2>4. Database Operations</h2>
+                
+                <p>Prolog can work as a database, dynamically adding and removing facts during execution.</p>
+
+                <h3>Dynamic Predicates</h3>
+                <div class="code-block">% Declare predicates as dynamic (can be modified at runtime)
+:- dynamic student/3.
+:- dynamic course/2.
+:- dynamic enrolled/2.
+
+% Initial data
+student(1, 'Alice', 20).
+student(2, 'Bob', 22).
+student(3, 'Charlie', 21).
+
+course(cs101, 'Intro to CS').
+course(math201, 'Calculus II').
+course(phy101, 'Physics I').
+
+enrolled(1, cs101).
+enrolled(1, math201).
+enrolled(2, cs101).
+enrolled(3, phy101).</div>
+
+                <h3>Database Manipulation</h3>
+                <div class="code-block">% Add new student (check if ID doesn't exist)
+add_student(ID, Name, Age) :-
+    \+ student(ID, _, _),
+    assertz(student(ID, Name, Age)).
+
+% Remove student and their enrollments
+remove_student(ID) :-
+    retract(student(ID, _, _)),
+    retractall(enrolled(ID, _)).
+
+% Enroll student in course
+enroll(StudentID, CourseID) :-
+    student(StudentID, _, _),
+    course(CourseID, _),
+    \+ enrolled(StudentID, CourseID),
+    assertz(enrolled(StudentID, CourseID)).
+
+% Find all courses for a student
+student_courses(StudentID, Courses) :-
+    findall(CourseID, enrolled(StudentID, CourseID), Courses).</div>
+
+                <div class="tip-box">
+                    <strong>Database Predicates:</strong><br>
+                    • <code>assertz/1</code> - Add fact at end<br>
+                    • <code>asserta/1</code> - Add fact at beginning<br>
+                    • <code>retract/1</code> - Remove first matching fact<br>
+                    • <code>retractall/1</code> - Remove all matching facts<br>
+                    • <code>findall/3</code> - Collect all solutions<br>
+                    • <code>bagof/3</code> - Collect solutions with backtracking<br>
+                    • <code>setof/3</code> - Collect unique sorted solutions
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH SECTION -->
+        <div id="search" class="content-section">
+            <div class="section-card">
+                <h2>5. Searching and Pathfinding</h2>
+                
+                <h3>Graph Representation</h3>
+                <div class="code-block">% Graph edges with weights
+edge(a, b, 3).
+edge(a, c, 4).
+edge(b, d, 2).
+edge(c, d, 6).
+edge(c, e, 5).
+edge(d, e, 1).
+
+% Make edges bidirectional
+connected(X, Y, W) :- edge(X, Y, W).
+connected(X, Y, W) :- edge(Y, X, W).</div>
+
+                <h3>Path Finding Algorithms</h3>
+                <div class="code-block">% Find any path between two nodes
+path(Start, End, Path) :-
+    path(Start, End, [Start], Path).
+
+path(End, End, Visited, Path) :-
+    reverse(Visited, Path).
+path(Start, End, Visited, Path) :-
+    connected(Start, Next, _),
+    \+ member(Next, Visited),  % Avoid cycles
+    path(Next, End, [Next|Visited], Path).
+
+% Find shortest path (simplified - not optimal)
+shortest_path(Start, End, Path, Cost) :-
+    findall([P, C], 
+            (path(Start, End, P), path_cost(P, C)), 
+            AllPaths),
+    min_cost_path(AllPaths, [Path, Cost]).
+
+% Calculate path cost
+path_cost([_], 0).
+path_cost([A, B|Rest], Cost) :-
+    connected(A, B, W),
+    path_cost([B|Rest], RestCost),
+    Cost is W + RestCost.
+
+% Find minimum cost path from list
+min_cost_path([Path], Path).
+min_cost_path([[P1, C1], [P2, C2]|Rest], MinPath) :-
+    (C1 =< C2 -> 
+        min_cost_path([[P1, C1]|Rest], MinPath) ;
+        min_cost_path([[P2, C2]|Rest], MinPath)).</div>
+
+                <div class="query-example">
+                    <strong>Example Queries:</strong>
+                    <code>?- path(a, e, Path).</code> → Finds a path from a to e<br>
+                    <code>?- shortest_path(a, e, Path, Cost).</code> → Finds the shortest path
+                </div>
+            </div>
+        </div>
+
+        <!-- CONSTRAINTS SECTION -->
+        <div id="constraints" class="content-section">
+            <div class="section-card">
+                <h2>6. Constraint Solving</h2>
+                
+                <h3>N-Queens Problem</h3>
+                <p>Place N queens on an NxN chessboard so no two queens attack each other.</p>
+                
+                <div class="code-block">% 4-Queens solution
+queens_4(Board) :-
+    Board = [Q1, Q2, Q3, Q4],
+    permutation([1,2,3,4], Board),
+    safe(Board).
+
+safe([]).
+safe([Q|Qs]) :- 
+    safe(Qs),
+    no_attack(Q, Qs, 1).
+
+no_attack(_, [], _).
+no_attack(Q, [Q2|Qs], Dist) :-
+    Q =\= Q2,                    % Not in same column
+    abs(Q - Q2) =\= Dist,        % Not in diagonal
+    Dist1 is Dist + 1,
+    no_attack(Q, Qs, Dist1).</div>
+
+                <h3>Sudoku Solver (4x4 simplified)</h3>
+                <div class="code-block">sudoku_4x4(Puzzle) :-
+    Puzzle = [
+        [A1, A2, A3, A4],
+        [B1, B2, B3, B4],
+        [C1, C2, C3, C4],
+        [D1, D2, D3, D4]
+    ],
+    % All values between 1 and 4
+    flatten(Puzzle, Vars),
+    maplist(between(1, 4), Vars),
+    % Row constraints
+    all_distinct([A1, A2, A3, A4]),
+    all_distinct([B1, B2, B3, B4]),
+    all_distinct([C1, C2, C3, C4]),
+    all_distinct([D1, D2, D3, D4]),
+    % Column constraints
+    all_distinct([A1, B1, C1, D1]),
+    all_distinct([A2, B2, C2, D2]),
+    all_distinct([A3, B3, C3, D3]),
+    all_distinct([A4, B4, C4, D4]),
+    % 2x2 box constraints
+    all_distinct([A1, A2, B1, B2]),
+    all_distinct([A3, A4, B3, B4]),
+    all_distinct([C1, C2, D1, D2]),
+    all_distinct([C3, C4, D3, D4]).</div>
+            </div>
+        </div>
+
+        <!-- DCG SECTION -->
+        <div id="dcg" class="content-section">
+            <div class="section-card">
+                <h2>7. Definite Clause Grammars (DCG)</h2>
+                
+                <p>DCGs provide a convenient notation for expressing grammars and parsers in Prolog.</p>
+
+                <h3>Simple English Parser</h3>
+                <div class="code-block">% Grammar rules using --> notation
+sentence --> noun_phrase, verb_phrase.
+noun_phrase --> determiner, noun.
+noun_phrase --> noun.
+verb_phrase --> verb, noun_phrase.
+verb_phrase --> verb.
+
+% Lexicon
+determiner --> [the].
+determiner --> [a].
+noun --> [cat].
+noun --> [dog].
+noun --> [bird].
+verb --> [runs].
+verb --> [flies].
+verb --> [chases].</div>
+
+                <h3>Arithmetic Expression Parser</h3>
+                <div class="code-block">% Parse and evaluate arithmetic expressions
+expr(Result) --> term(Result).
+expr(Result) --> term(T), [+], expr(E), {Result is T + E}.
+expr(Result) --> term(T), [-], expr(E), {Result is T - E}.
+
+term(Result) --> factor(Result).
+term(Result) --> factor(F), [*], term(T), {Result is F * T}.
+term(Result) --> factor(F), [/], term(T), {Result is F / T}.
+
+factor(N) --> [N], {number(N)}.
+factor(Result) --> ['('], expr(Result), [')'].</div>
+
+                <div class="query-example">
+                    <strong>Try These Parsers:</strong>
+                    <code>?- phrase(sentence, [the, cat, chases, a, bird]).</code> → true<br>
+                    <code>?- phrase(expr(R), [2, +, 3, *, 4]).</code> → R = 14<br>
+                    <code>?- phrase(sentence, S).</code> → Generates valid sentences
+                </div>
+            </div>
+        </div>
+
+        <!-- META SECTION -->
+        <div id="meta" class="content-section">
+            <div class="section-card">
+                <h2>8. Meta-Predicates and Higher-Order Programming</h2>
+                
+                <p>Prolog supports higher-order programming through meta-predicates that take other predicates as arguments.</p>
+
+                <h3>Functional Programming Patterns</h3>
+                <div class="code-block">% Map: Apply predicate to each element
+map(_, [], []).
+map(Pred, [H|T], [H2|T2]) :-
+    call(Pred, H, H2),
+    map(Pred, T, T2).
+
+% Filter: Keep elements that satisfy predicate
+filter(_, [], []).
+filter(Pred, [H|T], [H|T2]) :-
+    call(Pred, H),
+    filter(Pred, T, T2).
+filter(Pred, [H|T], T2) :-
+    \+ call(Pred, H),
+    filter(Pred, T, T2).
+
+% Fold/Reduce: Aggregate list into single value
+fold(_, Acc, [], Acc).
+fold(Pred, Acc, [H|T], Result) :-
+    call(Pred, H, Acc, NewAcc),
+    fold(Pred, NewAcc, T, Result).
+
+% Helper predicates
+double(X, Y) :- Y is X * 2.
+is_even(X) :- X mod 2 =:= 0.
+add(X, Y, Z) :- Z is X + Y.</div>
+
+                <div class="query-example">
+                    <strong>Examples:</strong>
+                    <code>?- map(double, [1,2,3,4], R).</code> → R = [2,4,6,8]<br>
+                    <code>?- filter(is_even, [1,2,3,4,5,6], R).</code> → R = [2,4,6]<br>
+                    <code>?- fold(add, 0, [1,2,3,4,5], Sum).</code> → Sum = 15
+                </div>
+            </div>
+        </div>
+
+        <!-- IO SECTION -->
+        <div id="io" class="content-section">
+            <div class="section-card">
+                <h2>9. File I/O and String Manipulation</h2>
+                
+                <h3>File Operations</h3>
+                <div class="code-block">% Read file lines
+read_file_lines(File, Lines) :-
+    open(File, read, Stream),
+    read_lines(Stream, Lines),
+    close(Stream).
+
+read_lines(Stream, []) :-
+    at_end_of_stream(Stream), !.
+read_lines(Stream, [Line|Lines]) :-
+    read_line_to_string(Stream, Line),
+    read_lines(Stream, Lines).
+
+% Write list to file
+write_list_to_file(File, List) :-
+    open(File, write, Stream),
+    write_items(Stream, List),
+    close(Stream).
+
+write_items(_, []).
+write_items(Stream, [H|T]) :-
+    write(Stream, H),
+    nl(Stream),
+    write_items(Stream, T).</div>
+
+                <h3>String Operations</h3>
+                <div class="code-block">% Reverse a string
+string_reverse(Str, Rev) :-
+    string_chars(Str, Chars),
+    reverse(Chars, RevChars),
+    string_chars(Rev, RevChars).
+
+% Check palindrome
+string_palindrome(Str) :-
+    string_reverse(Str, Str).</div>
+
+                <div class="query-example">
+                    <strong>String Examples:</strong>
+                    <code>?- string_reverse("hello", R).</code> → R = "olleh"<br>
+                    <code>?- string_palindrome("racecar").</code> → true
+                </div>
+            </div>
+        </div>
+
+        <!-- DEBUG SECTION -->
+        <div id="debug" class="content-section">
+            <div class="section-card">
+                <h2>10. Debugging and Testing</h2>
+                
+                <h3>Unit Testing Framework</h3>
+                <div class="code-block">% Simple test framework
+:- dynamic test_result/2.
+
+run_tests :-
+    retractall(test_result(_, _)),
+    test_factorial,
+    test_list_operations,
+    test_path_finding,
+    report_results.
+
+test_factorial :-
+    (factorial(5, 120) -> 
+        assertz(test_result(factorial, pass)) ; 
+        assertz(test_result(factorial, fail))).
+
+test_list_operations :-
+    (reverse([1,2,3], [3,2,1]) -> 
+        assertz(test_result(reverse, pass)) ; 
+        assertz(test_result(reverse, fail))),
+    (sum_list([1,2,3,4], 10) -> 
+        assertz(test_result(sum_list, pass)) ; 
+        assertz(test_result(sum_list, fail))).
+
+report_results :-
+    findall(Test-Result, test_result(Test, Result), Results),
+    format('Test Results:~n'),
+    forall(member(T-R, Results), format('  ~w: ~w~n', [T, R])).</div>
+
+                <h3>Debug Helper</h3>
+                <div class="code-block">% Trace helper for debugging
+debug_trace(Goal) :-
+    format('Calling: ~w~n', [Goal]),
+    call(Goal),
+    format('Success: ~w~n', [Goal]).</div>
+
+                <div class="tip-box">
+                    <strong>Debugging Tips:</strong><br>
+                    • Use <code>trace.</code> to step through execution<br>
+                    • Use <code>spy(predicate).</code> to set breakpoints<br>
+                    • Use <code>notrace.</code> to stop tracing<br>
+                    • Use <code>write/1</code> and <code>format/2</code> for print debugging<br>
+                    • Use the cut (!) carefully - it prevents backtracking<br>
+                    • Use <code>gtrace.</code> for GUI debugger (if available)<br>
+                    • Check for infinite loops with recursive predicates
+                </div>
+
+                <div class="exercise-box">
+                    <h4>Practice Exercises:</h4>
+                    <ol>
+                        <li>Write a predicate <code>nth_element(N, List, Elem)</code> to find the nth element of a list</li>
+                        <li>Implement <code>remove_duplicates(List, Result)</code> to remove duplicates from a list</li>
+                        <li>Create a family tree and write <code>ancestor(X, Y)</code> to find all ancestors</li>
+                        <li>Write <code>is_sorted(List)</code> to check if a list is sorted in ascending order</li>
+                        <li>Implement binary search tree operations (insert, search, delete)</li>
+                        <li>Create <code>flatten_list(NestedList, FlatList)</code> for nested lists</li>
+                        <li>Write <code>permutation(List, Perm)</code> to generate permutations</li>
+                        <li>Implement <code>quicksort(List, Sorted)</code> using the quicksort algorithm</li>
+                    </ol>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Common Mistakes to Avoid:</strong><br>
+                    • Forgetting to use <code>is</code> for arithmetic evaluation<br>
+                    • Not handling base cases in recursion<br>
+                    • Creating infinite loops with left recursion<br>
+                    • Forgetting the dot (.) at the end of facts and rules<br>
+                    • Using = instead of == for term comparison<br>
+                    • Not declaring predicates as dynamic when needed
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Mark button as active
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
